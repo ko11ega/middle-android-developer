@@ -30,8 +30,10 @@ object UserHolder {
         fullName: String,
         rawPhone: String
     ):User{
-        val phone = rawPhone?.replace("[^+\\d]".toRegex(), "")
-        if (!Regex("""[^+\d{11}]""").matches(input=phone))
+        val phone: String = rawPhone?.replace("[^+\\d]".toRegex(), "")
+        val regex = "\\+\\d{11}$".toRegex()
+
+        if (!regex.matches(input=phone))
             throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
         else if (map.containsKey(phone)) throw IllegalArgumentException("A user with this phone already exists")
         else return User.makeUser(fullName,phone = phone)
