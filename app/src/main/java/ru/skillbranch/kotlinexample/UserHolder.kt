@@ -12,7 +12,7 @@ object UserHolder {
     ):User{
         if (map.containsKey(email)) throw IllegalArgumentException("A user with this email already exists")
         else return User.makeUser(fullName, email=email, password=password)
-            .also { user->map[email] = user }
+            .also { user->map[user.login] = user }
     }
 
     /*
@@ -30,6 +30,7 @@ object UserHolder {
         fullName: String,
         rawPhone: String
     ):User{
+        //
         val phone: String = rawPhone?.replace("[^+\\d]".toRegex(), "")
         val regex = "\\+\\d{11}$".toRegex()
 

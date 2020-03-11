@@ -100,7 +100,7 @@ class ExampleUnitTest {
         holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
         holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
     }
-/*
+
     @Test
     fun login_user_success() {
         val holder = UserHolder
@@ -120,7 +120,7 @@ class ExampleUnitTest {
 
         Assert.assertEquals(expectedInfo, successResult)
     }
-
+/*
     @Test
     fun login_user_by_phone_success() {
         val holder = UserHolder
