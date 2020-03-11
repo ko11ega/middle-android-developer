@@ -140,7 +140,7 @@ class ExampleUnitTest {
 
         Assert.assertEquals(expectedInfo, successResult)
     }
-/*
+
     @Test
     fun login_user_fail() {
         val holder = UserHolder
@@ -160,7 +160,7 @@ class ExampleUnitTest {
 
         Assert.assertNull(failResult)
     }
-
+/*
     @Test
     fun request_access_code() {
         val holder = UserHolder
