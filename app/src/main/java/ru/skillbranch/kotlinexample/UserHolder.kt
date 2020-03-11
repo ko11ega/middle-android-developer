@@ -10,8 +10,9 @@ object UserHolder {
         email:String,
         password: String
     ):User{
-        return User.makeUser(fullName, email=email, password=password)
-            .also { user->map[user.login] = user }
+        if (map.containsKey(email)) throw IllegalArgumentException("A user with this email already exists")
+        else return User.makeUser(fullName, email=email, password=password)
+            .also { user->map[email] = user }
     }
 
 /*
@@ -26,14 +27,18 @@ object UserHolder {
 иначе необходимо бросить исключение
 IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
  */
-    /*fun registerUserByPhone(
+    fun registerUserByPhone(
         fullName: String,
         rawPhone: String
     ):User{
-        return User.makeUser(fullName,phone = rawPhone)
-            .also { user->map[user.login] = user }
+        val phone = rawPhone?.replace("[^+\\d]".toRegex(), "")
+        if (!Regex("""[^+\d{11}]""").matches(input=phone))
+            throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
+        else if (map.containsKey(phone)) throw IllegalArgumentException("A user with this phone already exists")
+            else return User.makeUser(fullName,phone = phone)
+                .also { user->map[phone] = user }
     }
-*/
+
 /*
 Авторизация пользователя
 Необходимо реализовать метод объекта (object UserHolder) для авторизации по логину и паролю

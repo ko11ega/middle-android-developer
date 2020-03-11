@@ -61,7 +61,7 @@ class ExampleUnitTest {
         holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
         holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
     }
-/*
+
     @Test
     fun register_user_by_phone_success() {
         val holder = UserHolder
@@ -100,7 +100,7 @@ class ExampleUnitTest {
         holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
         holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
     }
-
+/*
     @Test
     fun login_user_success() {
         val holder = UserHolder
