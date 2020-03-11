@@ -116,6 +116,16 @@ class User private constructor(
         }.toString()
     }
 
+
+    fun newAccessCode(): Unit {
+        val oldAccCode = accessCode
+        val accCode = generateAccessCode()
+        println("oldAccCode $oldAccCode, accCode $accCode")
+        accessCode = accCode
+        passwordHash = encrypt(accCode)
+    }
+
+
     private fun sendAccessCodeToUser(phone: String?, code: String) {
         println("..... sending access code: $code on $phone")
     }

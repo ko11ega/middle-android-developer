@@ -160,7 +160,7 @@ class ExampleUnitTest {
 
         Assert.assertNull(failResult)
     }
-/*
+
     @Test
     fun request_access_code() {
         val holder = UserHolder
@@ -184,6 +184,6 @@ class ExampleUnitTest {
         Assert.assertNotEquals(oldAccess, user.accessCode!!)
         Assert.assertEquals(expectedInfo, successResult)
     }
-*/
+
 
 }

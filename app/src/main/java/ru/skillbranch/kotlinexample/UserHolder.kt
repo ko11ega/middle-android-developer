@@ -79,6 +79,22 @@ object UserHolder {
         }
     }
 
+    /*
+    Запрос кода авторизации
+    Необходимо реализовать метод объекта (object UserHolder) для запроса нового кода авторизации пользователя по номеру телефона
+
+    Реализуй метод requestAccessCode(login: String) : Unit, после выполнения данного метода у пользователя
+    с соответствующим логином должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
+    соответственно должен измениться и хеш пароля пользователя (вызов метода loginUser должен отрабатывать корректно)
+     */
+    fun requestAccessCode(login: String): Unit {
+        val phone: String = login?.replace("[^+\\d]".toRegex(), "")
+        val regex = "\\+\\d{11}$".toRegex()
+        //check if it correct phone?
+        if (regex.matches(input = phone)) {
+            map[phone]?.newAccessCode()
+        }
+    }
 
 
 
