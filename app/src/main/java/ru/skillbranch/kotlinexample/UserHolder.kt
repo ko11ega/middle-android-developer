@@ -6,13 +6,16 @@ object UserHolder {
     private val map = mutableMapOf<String, User>()
 
     fun registerUser(
-        fullName:String,
-        email:String,
+        fullName: String,
+        email: String,
         password: String
-    ):User{
-        if (map.containsKey(email)) throw IllegalArgumentException("A user with this email already exists")
-        else return User.makeUser(fullName, email=email, password=password)
-            .also { user->map[user.login] = user }
+    ): User {
+        return User.makeUser(fullName, email = email, password = password)
+            .also { user ->
+                if (map.containsKey(user.login)) throw IllegalArgumentException("A user with this email already exists")
+                else map[user.login] = user
+                //println(map)
+            }
     }
 
     /*
@@ -29,16 +32,16 @@ object UserHolder {
     fun registerUserByPhone(
         fullName: String,
         rawPhone: String
-    ):User{
+    ): User {
         //
         val phone: String = rawPhone?.replace("[^+\\d]".toRegex(), "")
         val regex = "\\+\\d{11}$".toRegex()
 
-        if (!regex.matches(input=phone))
+        if (!regex.matches(input = phone))
             throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
         else if (map.containsKey(phone)) throw IllegalArgumentException("A user with this phone already exists")
-        else return User.makeUser(fullName,phone = phone)
-            .also { user->map[phone] = user }
+        else return User.makeUser(fullName, phone = phone)
+            .also { user -> map[user.login] = user }
     }
 
 
@@ -51,21 +54,37 @@ object UserHolder {
 пароль соответственно accessCode или password указанный при регистрации методом registerUser)
 или возвращающий null если пользователь с указанным логином и паролем не найден (или неверный пароль)
  */
-    fun loginUser (login:String, password: String): String?{
+    fun loginUser(login: String, password: String): String? {
         println("loginUser password = $password")
         println("map[login.trim()]? ${map[login.trim()]} ")
-        return map[login.trim()]?.run{
-            //if this.      .meta["auth"]=='password'
+        val phone: String = login?.replace("[^+\\d]".toRegex(), "")
+        val regex = "\\+\\d{11}$".toRegex()
+        //check if it correct phone?
+        if (regex.matches(input = phone)) {
+            return map[phone]?.run {
                 println("loginUser password = $password")
-                if(checkPassword(password)) {
-                    println("loginUser() ${this.userInfo}")
-                    this.userInfo}
-                else null
+                if (this.accessCode == password.trim()) {
+                    println("loginUser() phone ${this.userInfo}")
+                    this.userInfo
+                } else null
+            }
+        } else { //if login == email
+            return map[login.trim()]?.run {
+                println("loginUser email+ password = ${this.userInfo}")
+                if (checkPassword(password)) {
+                    println("loginUser() check password ${this.userInfo}")
+                    this.userInfo
+                } else null
+            }
         }
     }
 
+
+
+
+
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    fun clearHolder(){
+    fun clearHolder() {
         map.clear()
     }
 
