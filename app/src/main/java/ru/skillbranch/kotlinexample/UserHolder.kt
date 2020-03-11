@@ -15,18 +15,17 @@ object UserHolder {
             .also { user->map[email] = user }
     }
 
-/*
-Регистрация пользователя через номер телефона
-Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя через телефон
-
-Реализуй метод registerUserByPhone(fullName: String, rawPhone: String) возвращающий объект User
-(объект User должен содержать поле accessCode с 6 значным значением состоящим из случайных строчных
-и прописных букв латинского алфавита и цифр от 0 до 9), если пользователь с таким же телефоном
-уже есть в системе необходимо бросить ошибку IllegalArgumentException("A user with this phone already exists")
-валидным является любой номер телефона содержащий первым символом + и 11 цифр и не содержащий буквы,
-иначе необходимо бросить исключение
-IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
- */
+    /*
+    Регистрация пользователя через номер телефона
+    Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя через телефон
+    Реализуй метод registerUserByPhone(fullName: String, rawPhone: String) возвращающий объект User
+    (объект User должен содержать поле accessCode с 6 значным значением состоящим из случайных строчных
+    и прописных букв латинского алфавита и цифр от 0 до 9), если пользователь с таким же телефоном
+    уже есть в системе необходимо бросить ошибку IllegalArgumentException("A user with this phone already exists")
+    валидным является любой номер телефона содержащий первым символом + и 11 цифр и не содержащий буквы,
+    иначе необходимо бросить исключение
+    IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
+     */
     fun registerUserByPhone(
         fullName: String,
         rawPhone: String
@@ -35,11 +34,12 @@ IllegalArgumentException("Enter a valid phone number starting with a + and conta
         if (!Regex("""[^+\d{11}]""").matches(input=phone))
             throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
         else if (map.containsKey(phone)) throw IllegalArgumentException("A user with this phone already exists")
-            else return User.makeUser(fullName,phone = phone)
-                .also { user->map[phone] = user }
+        else return User.makeUser(fullName,phone = phone)
+            .also { user->map[phone] = user }
     }
 
-/*
+
+    /*
 Авторизация пользователя
 Необходимо реализовать метод объекта (object UserHolder) для авторизации по логину и паролю
 
@@ -49,9 +49,15 @@ IllegalArgumentException("Enter a valid phone number starting with a + and conta
 или возвращающий null если пользователь с указанным логином и паролем не найден (или неверный пароль)
  */
     fun loginUser (login:String, password: String): String?{
+        println("loginUser password = $password")
+        println("map[login.trim()]? ${map[login.trim()]} ")
         return map[login.trim()]?.run{
-            if(checkPassword(password)) this.userInfo
-            else null
+            //if this.      .meta["auth"]=='password'
+                println("loginUser password = $password")
+                if(checkPassword(password)) {
+                    println("loginUser() ${this.userInfo}")
+                    this.userInfo}
+                else null
         }
     }
 
