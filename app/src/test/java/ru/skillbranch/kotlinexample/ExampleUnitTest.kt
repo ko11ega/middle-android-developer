@@ -13,23 +13,23 @@ import ru.skillbranch.kotlinexample.extensions.dropLastUntil
 class ExampleUnitTest {
 
     /**
-        Добавьте метод в UserHolder для очистки значений UserHolder после выполнения каждого теста,
-        это необходимо чтобы тесты можно было запускать одновременно
+    Добавьте метод в UserHolder для очистки значений UserHolder после выполнения каждого теста,
+    это необходимо чтобы тесты можно было запускать одновременно
 
-            @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-            fun clearHolder(){
-                map.clear()
-            }
-    */
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    fun clearHolder(){
+    map.clear()
+    }
+     */
     @After
-    fun after(){
+    fun after() {
         UserHolder.clearHolder()
     }
 
     @Test
     fun register_user_success() {
         val holder = UserHolder
-        val user = holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        val user = holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
         val expectedInfo = """
             firstName: John
             lastName: Doe
@@ -47,20 +47,20 @@ class ExampleUnitTest {
     @Test(expected = IllegalArgumentException::class)
     fun register_user_fail_blank() {
         val holder = UserHolder
-        holder.registerUser("", "John_Doe@unknown.com","testPass")
+        holder.registerUser("", "John_Doe@unknown.com", "testPass")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun register_user_fail_illegal_name() {
         val holder = UserHolder
-        holder.registerUser("John Jr Doe", "John_Doe@unknown.com","testPass")
+        holder.registerUser("John Jr Doe", "John_Doe@unknown.com", "testPass")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun register_user_fail_illegal_exist() {
         val holder = UserHolder
-        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
-        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
+        holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
     }
 
     @Test
@@ -105,7 +105,7 @@ class ExampleUnitTest {
     @Test
     fun login_user_success() {
         val holder = UserHolder
-        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
         val expectedInfo = """
             firstName: John
             lastName: Doe
@@ -117,7 +117,7 @@ class ExampleUnitTest {
             meta: {auth=password}
         """.trimIndent()
 
-        val successResult =  holder.loginUser("john_doe@unknown.com", "testPass")
+        val successResult = holder.loginUser("john_doe@unknown.com", "testPass")
 
         Assert.assertEquals(expectedInfo, successResult)
     }
@@ -137,7 +137,7 @@ class ExampleUnitTest {
             meta: {auth=sms}
         """.trimIndent()
 
-        val successResult =  holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
+        val successResult = holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
 
         Assert.assertEquals(expectedInfo, successResult)
     }
@@ -145,9 +145,9 @@ class ExampleUnitTest {
     @Test
     fun login_user_fail() {
         val holder = UserHolder
-        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
 
-        val failResult =  holder.loginUser("john_doe@unknown.com", "test")
+        val failResult = holder.loginUser("john_doe@unknown.com", "test")
 
         Assert.assertNull(failResult)
     }
@@ -155,9 +155,9 @@ class ExampleUnitTest {
     @Test
     fun login_user_not_found() {
         val holder = UserHolder
-        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        holder.registerUser("John Doe", "John_Doe@unknown.com", "testPass")
 
-        val failResult =  holder.loginUser("john_cena@unknown.com", "test")
+        val failResult = holder.loginUser("john_cena@unknown.com", "test")
 
         Assert.assertNull(failResult)
     }
@@ -180,7 +180,7 @@ class ExampleUnitTest {
             meta: {auth=sms}
         """.trimIndent()
 
-        val successResult =  holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
+        val successResult = holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
 
         Assert.assertNotEquals(oldAccess, user.accessCode!!)
         Assert.assertEquals(expectedInfo, successResult)
@@ -198,7 +198,55 @@ class ExampleUnitTest {
             .dropLastUntil { it == "of" }
         Assert.assertEquals(listOf(1), sRes)
         Assert.assertEquals(listOf("House", "Nymeros", "Martell"), successResult)
+    }
 
+    /*
+    *Импорт из csv
+    Необходимо реализовать метод объекта (object UserHolder) для импорта пользователей из списка строк
+    +3
+    Реализуй метод importUsers(list: List): List, в качестве аргумента принимает список строк
+    где разделителем полей является ";" данные перечислены в следующем порядке -
+    Полное имя пользователя; email; соль:хеш пароля; телефон
+    (Пример: " John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;")
+    метод должен вернуть коллекцию список User (Пример возвращаемого userInfo:
+    firstName: John
+    lastName: Doe
+    login: johndoe@unknow.com
+    fullName: John Doe
+    initials: J D
+    email: JohnDoe@unknow.com
+    phone: null
+    meta: {src=csv}
+    ), при этом meta должно содержать "src" : "csv", если сзначение в csv строке пустое
+    то соответствующее свойство в объекте User должно быть null, обратите внимание что salt и hash пароля
+    в csv разделены ":" , после импорта пользователей вызов метода loginUser должен отрабатывать корректно
+    (достаточно по логину паролю)
+     */
+    @Test
+    fun test_importUsers() {
+        //val sRes = listOf(1, 2, 3).dropLastUntil { it == 2 }
+        val holder = UserHolder
+        val userList: List<String> = listOf(
+            //" John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;",
+            " John Doe ;test@test.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;"
+        )
+        val successResult: List<User> = holder.importUsers(userList)
+        val expectedInfo = """
+    firstName: John
+    lastName: Doe
+    login: johndoe@unknow.com
+    fullName: John Doe
+    initials: J D
+    email: JohnDoe@unknow.com
+    phone: null
+    meta: {src=csv}
+        """.trimIndent()
+        val loginResult = holder.loginUser("johndoe@unknow.com", "testPass")
 
+        //    .dropLastUntil { it == "of" }
+        Assert.assertEquals(1, successResult.size)
+        Assert.assertEquals(expectedInfo, successResult[0].userInfo)
+
+        Assert.assertEquals(expectedInfo, loginResult)
     }
 }

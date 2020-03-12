@@ -41,14 +41,32 @@ class User private constructor(
         }
         get() = _login!!
 
+    private var _salt: String? = null
     private val salt: String by lazy{
-        ByteArray(16).also{SecureRandom().nextBytes(it)}.toString()
+        _salt ?: ByteArray(16).also { SecureRandom().nextBytes(it) }.toString()
     }
 
     private lateinit var passwordHash: String
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     var accessCode: String? = null //@VisibleForTesting(otherwise = VisibleForTesting.NONE)
+
+    //for import
+    constructor(
+        firstName: String,
+        lastName: String?,
+        email: String?,
+        hash: String,
+        salt: String?
+    ) : this(
+        firstName, lastName, email = email,
+        meta = mapOf("src" to "csv")
+    ) {
+        println("Secondary import constructor")
+        passwordHash = hash
+        _salt = salt
+
+    }
 
 
     //for email
@@ -142,11 +160,14 @@ class User private constructor(
             fullName: String,
             email:String? = null,
             password: String? = null,
-            phone:String? = null
+            phone: String? = null,
+            hash: String? = null,
+            salt: String? = null
         ):User{
             val (firstName, lastName) = fullName.fullNameToPair()
 
             return when{
+                !hash.isNullOrBlank() -> User(firstName, lastName, email, hash = hash, salt = salt)
                 !phone.isNullOrBlank() -> User(firstName, lastName, phone)
                 !email.isNullOrBlank() && !password.isNullOrBlank() -> User(firstName, lastName, email, password)
                 else -> throw IllegalArgumentException("Email or phone must be not null or blank")
