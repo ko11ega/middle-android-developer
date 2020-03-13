@@ -6,7 +6,6 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
 import kotlin.IllegalArgumentException
-import kotlin.math.log
 
 class User private constructor(
     private val firstName: String,
@@ -24,25 +23,24 @@ class User private constructor(
             .capitalize()
     private val initials: String
         get() = listOfNotNull(firstName, lastName)
-            .map{ it.first().toUpperCase() }
+            .map { it.first().toUpperCase() }
             .joinToString(" ")
 
     private var phone: String? = null
         set(value) {
-            field =value?.replace("[^+\\d]".toRegex(), "")
+            field = value?.replace("[^+\\d]".toRegex(), "")
         }
-
 
 
     private var _login: String? = null
     internal var login: String
-        set(value){
+        set(value) {
             _login = value?.toLowerCase()
         }
         get() = _login!!
 
     private var _salt: String? = null
-    private val salt: String by lazy{
+    private val salt: String by lazy {
         _salt ?: ByteArray(16).also { SecureRandom().nextBytes(it) }.toString()
     }
 
@@ -56,14 +54,17 @@ class User private constructor(
         firstName: String,
         lastName: String?,
         email: String?,
+        phone: String?,
         hash: String,
-        salt: String?
+        salt: String
     ) : this(
-        firstName, lastName, email = email,
+        firstName, lastName, email = email, rawPhone = phone,
         meta = mapOf("src" to "csv")
     ) {
         println("Secondary import constructor")
-        passwordHash = hash
+        if (hash != null) {
+            passwordHash = hash
+        }
         _salt = salt
 
     }
@@ -75,7 +76,7 @@ class User private constructor(
         lastName: String?,
         email: String,
         password: String
-    ): this(firstName, lastName, email = email, meta = mapOf("auth" to "password")){
+    ) : this(firstName, lastName, email = email, meta = mapOf("auth" to "password")) {
         println("Secondary mail constructor")
         passwordHash = encrypt(password)
     }
@@ -85,7 +86,7 @@ class User private constructor(
         firstName: String,
         lastName: String?,
         rawPhone: String
-    ): this(firstName, lastName, rawPhone = rawPhone, meta = mapOf("auth" to "sms")){
+    ) : this(firstName, lastName, rawPhone = rawPhone, meta = mapOf("auth" to "sms")) {
         println("Secondary phone constructor")
         val code = generateAccessCode()
         passwordHash = encrypt(code)
@@ -96,8 +97,8 @@ class User private constructor(
     init {
         println("First init block, primary constructor was called")
 
-        check(!firstName.isBlank()){"FirstName must be not empty"}
-        check(email.isNullOrBlank()|| rawPhone.isNullOrBlank()){"Email or phone must be not blank"}
+        check(!firstName.isBlank()) { "FirstName must be not empty" }
+        check(email.isNullOrBlank() || rawPhone.isNullOrBlank()) { "Email or phone must be not blank" }
 
         phone = rawPhone
         login = email ?: phone!!
@@ -114,10 +115,10 @@ class User private constructor(
         """.trimIndent()
     }
 
-    fun checkPassword(pass:String) = encrypt(pass) == passwordHash
+    fun checkPassword(pass: String) = encrypt(pass) == passwordHash
 
-    fun changePassword(oldPass:String, newPass:String){
-        if(checkPassword(oldPass)) passwordHash = encrypt(newPass)
+    fun changePassword(oldPass: String, newPass: String) {
+        if (checkPassword(oldPass)) passwordHash = encrypt(newPass)
         else throw IllegalArgumentException("The entered password does not match the current password")
     }
 
@@ -125,9 +126,9 @@ class User private constructor(
 
     private fun generateAccessCode(): String {
         val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        return StringBuilder().apply{
-            repeat(6){
-                (possible.indices).random().also{index ->
+        return StringBuilder().apply {
+            repeat(6) {
+                (possible.indices).random().also { index ->
                     append(possible[index])
                 }
             }
@@ -150,35 +151,47 @@ class User private constructor(
 
     private fun String.md5(): String {
         val md = MessageDigest.getInstance("MD5")
-        val digest =md.digest(toByteArray())  //16 byte
-        val hexString = BigInteger(1,digest).toString(16)
-        return hexString.padStart(32,'0')
+        val digest = md.digest(toByteArray())  //16 byte
+        val hexString = BigInteger(1, digest).toString(16)
+        return hexString.padStart(32, '0')
     }
 
-    companion object Factory{
+    companion object Factory {
         fun makeUser(
             fullName: String,
-            email:String? = null,
+            email: String? = null,
             password: String? = null,
             phone: String? = null,
             hash: String? = null,
             salt: String? = null
-        ):User{
+        ): User {
             val (firstName, lastName) = fullName.fullNameToPair()
 
-            return when{
-                !hash.isNullOrBlank() -> User(firstName, lastName, email, hash = hash, salt = salt)
+            return when {
+                !hash.isNullOrBlank() && !salt.isNullOrBlank() && phone.isNullOrBlank() -> User(
+                    firstName, lastName, email, null, hash = hash!!,
+                    salt = salt!!
+                )
+                !hash.isNullOrBlank() && !salt.isNullOrBlank() && email.isNullOrBlank() -> User(
+                    firstName, lastName, null, phone, hash = hash!!,
+                    salt = salt!!
+                )
                 !phone.isNullOrBlank() -> User(firstName, lastName, phone)
-                !email.isNullOrBlank() && !password.isNullOrBlank() -> User(firstName, lastName, email, password)
+                !email.isNullOrBlank() && !password.isNullOrBlank() -> User(
+                    firstName,
+                    lastName,
+                    email,
+                    password
+                )
                 else -> throw IllegalArgumentException("Email or phone must be not null or blank")
             }
         }
 
-        private fun String.fullNameToPair(): Pair<String, String?>{
+        private fun String.fullNameToPair(): Pair<String, String?> {
             return this.split(" ")
-                .filter{ it.isNotBlank()}
-                .run{
-                    when(size){
+                .filter { it.isNotBlank() }
+                .run {
+                    when (size) {
                         1 -> first() to null
                         2 -> first() to last()
                         else -> throw IllegalArgumentException("Fullname must contains only first name and last name, current split result ${this@fullNameToPair}")

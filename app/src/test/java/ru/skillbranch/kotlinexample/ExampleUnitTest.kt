@@ -224,7 +224,43 @@ class ExampleUnitTest {
      */
     @Test
     fun test_importUsers() {
+        val holder = UserHolder
+        val expectedUsers = holder.importUsers(
+            listOf(
+                " John    Doe ;JohnDoe@list.ru;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;",
+                " John;;[B@77a567e1:a07e337973f9ab704118c73ff827a695;+7 (900) 971-11-11;"
+            )
+        )
+        val expectedInfo = """
+            firstName: John
+            lastName: Doe
+            login: johndoe@list.ru
+            fullName: John Doe
+            initials: J D
+            email: JohnDoe@list.ru
+            phone: null
+            meta: {src=csv}
+        """.trimIndent()
 
+        val expectedInfo2 = """
+            firstName: John
+            lastName: null
+            login: +79009711111
+            fullName: John
+            initials: J
+            email: null
+            phone: +79009711111
+            meta: {src=csv}
+        """.trimIndent()
+
+        val successResult = holder.loginUser("johndoe@list.ru", "testPass")
+        val failResult = holder.loginUser("JohnDoe@gmail.ru", "invalidPass")
+
+        Assert.assertEquals(null, failResult)
+        Assert.assertEquals(expectedInfo, successResult)
+        Assert.assertEquals(expectedInfo, expectedUsers.first().userInfo)
+        Assert.assertEquals(expectedInfo2, expectedUsers.last().userInfo)
+/*
         val holder = UserHolder
         val userList: List<String> = listOf(
             " Test test ;test@test.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;",
@@ -249,5 +285,7 @@ class ExampleUnitTest {
         Assert.assertNotEquals(expectedInfo, successResult[0].userInfo)
 
         Assert.assertEquals(expectedInfo, loginResult)
+*/
+
     }
 }
