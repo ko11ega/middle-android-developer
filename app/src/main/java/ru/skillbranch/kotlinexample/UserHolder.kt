@@ -122,12 +122,10 @@ meta: {src=csv}
 
     fun importUsers(list: List<String>): List<User> {
 
-        var listOfUsers: List<User> = listOf()
+        var listOfUsers: MutableList<User> = mutableListOf()
 
         for (csvString in list) {
-            var fields: List<String> =
-                " John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;"
-                    .split(";")
+            var fields: List<String> = csvString.split(";")
             val fullName: String = fields[0]
             val email: String? = fields[1]
             val (salt, hash) = fields[2].split(":")
@@ -140,7 +138,7 @@ meta: {src=csv}
                 hash = hash,
                 salt = salt
             )
-            listOfUsers = listOfUsers.plus(user)
+            listOfUsers.add(user)
             map[user.login] = user
             println("in for listOfUsers.size ${listOfUsers.size}")
             println("user ${user.userInfo}")

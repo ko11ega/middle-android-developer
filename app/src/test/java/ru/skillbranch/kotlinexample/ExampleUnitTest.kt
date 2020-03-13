@@ -224,11 +224,11 @@ class ExampleUnitTest {
      */
     @Test
     fun test_importUsers() {
-        //val sRes = listOf(1, 2, 3).dropLastUntil { it == 2 }
+
         val holder = UserHolder
         val userList: List<String> = listOf(
-            //" John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;",
-            " John Doe ;test@test.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;"
+            " Test test ;test@test.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;",
+            " John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;"
         )
         val successResult: List<User> = holder.importUsers(userList)
         val expectedInfo = """
@@ -244,8 +244,9 @@ class ExampleUnitTest {
         val loginResult = holder.loginUser("johndoe@unknow.com", "testPass")
 
         //    .dropLastUntil { it == "of" }
-        Assert.assertEquals(1, successResult.size)
-        Assert.assertEquals(expectedInfo, successResult[0].userInfo)
+        Assert.assertEquals(2, successResult.size)
+        Assert.assertEquals(expectedInfo, successResult[1].userInfo)
+        Assert.assertNotEquals(expectedInfo, successResult[0].userInfo)
 
         Assert.assertEquals(expectedInfo, loginResult)
     }
