@@ -79,7 +79,7 @@ class RootActivity : AppCompatActivity() {
     private fun setupSubMenu() {
         btn_text_up.setOnClickListener{ viewModel.handleUpText()}
         btn_text_down.setOnClickListener{ viewModel.handleDownText()}
-        switch_mode.setOnClickListener{ viewModel.handleNightMode()}/To change body of created functions use File | Settings | File Templates.
+        switch_mode.setOnClickListener{ viewModel.handleNightMode()}
     }
 
 
@@ -87,7 +87,7 @@ class RootActivity : AppCompatActivity() {
         btn_like.setOnClickListener {viewModel.handleLike() }
         btn_bookmark.setOnClickListener {viewModel.handleBookmark() }
         btn_share.setOnClickListener { viewModel.handleShare() }
-        btn_settings.setOnClickListener { viewModel.handleToggleMenu()}created functions use File | Settings | File Templates.
+        btn_settings.setOnClickListener { viewModel.handleToggleMenu()}
     }
 
     private fun setupToolbar(){
