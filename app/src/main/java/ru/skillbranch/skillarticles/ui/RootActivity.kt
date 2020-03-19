@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.layout_submenu.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.viewmodels.ArticleState
-//import ru.skillbranch.skillarticles.viewmodels.IArticleViewModel
+import ru.skillbranch.skillarticles.viewmodels.IArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.Notify
 import ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
@@ -42,8 +42,6 @@ class RootActivity : AppCompatActivity() {
             renderNotification(it)
         }
     }
-
-
 
     private fun renderUi(data: ArticleState){
         //bind submenu state
@@ -98,7 +96,7 @@ class RootActivity : AppCompatActivity() {
         //check toolbar imports
         (logo?.layoutParams as? Toolbar.LayoutParams)?.let{
             it.width = dpToIntPx(40)
-            it.hight = dpToIntPx(40)
+            it.height = dpToIntPx(40)
             it.marginEnd = dpToIntPx(16)
             logo.layoutParams = it
         }
@@ -110,7 +108,7 @@ class RootActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(coordinator_container, notify.message, Snackbar.LENGTH_LONG)
 
         when(notify) {
-            if Notify.TextMessage -> {/* nothing */}
+            is Notify.TextMessage -> {/* nothing */}
             is Notify.ActionMessage -> {
                 snackbar.setActionTextColor(getColor(R.color.color_accent_dark))
                 snackbar.setAction(notify.actionLabel) {
@@ -123,7 +121,7 @@ class RootActivity : AppCompatActivity() {
                     setTextColor(getColor(android.R.color.white))
                     setActionTextColor(getColor(android.R.color.white))
                     setAction(notify.errLabel){
-                        notify.errHandler.invoke()
+                        notify.errHandler?.invoke()
                     }
                 }
             }
