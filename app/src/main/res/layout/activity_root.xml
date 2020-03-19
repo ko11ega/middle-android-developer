@@ -54,7 +54,7 @@
         android:theme="@style/ArticleBarsTheme"
         android:elevation="4dp"
         app:layout_insetEdge="bottom"
-        android:background="@color/color_accent"/>
+ />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

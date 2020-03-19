@@ -148,7 +148,7 @@ class ArticleViewModel(private val articleId:String):BaseViewModel<ArticleState>
         val msg = if (!isLiked) Notify.TextMessage("Mark is liked")
         else {
             Notify.ActionMessage(
-                "Don't like it anymore", //message
+                "Don`t like it anymore", //message
                 "No, still like it", //action label on snackbar
                 toggleLike //handler function, if press "No, still like it"
             )
