@@ -45,7 +45,7 @@
         app:layout_dodgeInsetEdges="bottom"
         android:visibility="gone"
         tools:visibility="visible"
-        app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.BottombarBehavior"
+        app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.SubmenuBehavior"
      />
 
     <ru.skillbranch.skillarticles.ui.custom.Bottombar
