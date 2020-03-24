@@ -22,7 +22,8 @@
             app:title="@string/app_name"
             app:subtitle="loading..."
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            android:elevation="4dp"/>
+            android:elevation="4dp"
+            />
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.core.view.marginRight
 import kotlin.math.max
 import kotlin.math.min
 
@@ -33,17 +34,18 @@ class SubmenuBehavior<V : View>(context: Context, attrs: AttributeSet) :
         Log.d("M_SubmenuBehavior","onStartNestedScroll[directTargetChild] ${directTargetChild.javaClass}")
         Log.d("M_SubmenuBehavior","onStartNestedScroll[child] ${child.javaClass}")
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
+
     }
 
     override fun onNestedPreScroll(
         coordinatorLayout: CoordinatorLayout, child: V, target: View, dx: Int, dy: Int, consumed: IntArray, type: Int
     ) {
         Log.d("M_SubmenuBehavior","onNestedPreScroll[child] ${child.javaClass}")
-        Log.d("M_SubmenuBehavior","onNestedPreScroll[child] ${child.translationY}")
+        Log.d("M_SubmenuBehavior","onNestedPreScroll[child] ${child.marginRight}")
 
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
         //if (child.isVisible == true)
         //child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
-        child.translationX = max(0f, min(child.width.toFloat(), child.translationX + dy))
+        child.translationX = max(0f, min(child.width.toFloat()+child.marginRight, child.translationX + dy))
     }
 }
