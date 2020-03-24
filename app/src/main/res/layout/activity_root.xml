@@ -54,7 +54,7 @@
         android:theme="@style/ArticleBarsTheme"
         android:elevation="4dp"
         app:layout_insetEdge="bottom"
-        app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.BottomNavigationBehavior"
+        app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.BottombarBehavior"
  />
 
 

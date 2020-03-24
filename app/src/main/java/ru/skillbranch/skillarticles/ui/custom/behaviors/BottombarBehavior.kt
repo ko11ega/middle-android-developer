@@ -1,4 +1,4 @@
-package ru.skillbranch.skillarticles.ui.custom
+package ru.skillbranch.skillarticles.ui.custom.behaviors
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) :
+class BottombarBehavior<V : View>(context: Context, attrs: AttributeSet) :
     CoordinatorLayout.Behavior<V>(context, attrs) {
 
     override fun onStartNestedScroll(
@@ -25,3 +25,9 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
         child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
     }
 }
+
+/*
+-         │   │   ├── behaviors
+-         │   │   │   ├── BottombarBehavior.kt
+-         │   │   │   └── SubmenuBehavior.kt
+*/
