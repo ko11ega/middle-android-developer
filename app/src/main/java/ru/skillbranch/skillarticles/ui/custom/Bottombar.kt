@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.shape.MaterialShapeDrawable
+import kotlinx.android.synthetic.main.activity_root.view.*
 import ru.skillbranch.skillarticles.R
 
 class Bottombar @JvmOverloads constructor(
@@ -17,5 +18,6 @@ class Bottombar @JvmOverloads constructor(
         val materialBg = MaterialShapeDrawable.createWithElevationOverlay(context)
         materialBg.elevation = elevation
         background = materialBg
+
     }
 }

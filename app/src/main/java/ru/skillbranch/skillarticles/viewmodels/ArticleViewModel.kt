@@ -15,6 +15,7 @@ import java.util.*
 class ArticleViewModel(private val articleId:String):BaseViewModel<ArticleState>(ArticleState()){
     private val repository = ArticleRepository
     private var menuIsShown:Boolean = false
+    private var bottomBarIsShown:Boolean = true
 
     init {
         //subscribe on mutable data
