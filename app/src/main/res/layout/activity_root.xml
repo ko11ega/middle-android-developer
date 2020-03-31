@@ -23,7 +23,10 @@
             app:subtitle="loading..."
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
             android:elevation="4dp"
+
+
             />
+
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -48,6 +51,7 @@
         tools:visibility="visible"
         app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.SubmenuBehavior"
      />
+
 
     <ru.skillbranch.skillarticles.ui.custom.Bottombar
         android:id="@+id/bottombar"

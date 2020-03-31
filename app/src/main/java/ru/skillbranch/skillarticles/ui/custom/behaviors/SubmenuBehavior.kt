@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.marginRight
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.properties.Delegates
 
 /*
 ArticleMenu scroll Behavior
@@ -30,12 +31,14 @@ class SubmenuBehavior<V : View>(context: Context, attrs: AttributeSet) :
     override fun onStartNestedScroll(
         coordinatorLayout: CoordinatorLayout, child: V, directTargetChild: View, target: View, axes: Int, type: Int
     ): Boolean {
+
         Log.d("M_SubmenuBehavior","onStartNestedScroll[target] ${target.javaClass}")
         Log.d("M_SubmenuBehavior","onStartNestedScroll[directTargetChild] ${directTargetChild.javaClass}")
         Log.d("M_SubmenuBehavior","onStartNestedScroll[child] ${child.javaClass}")
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
 
     }
+
 
     override fun onNestedPreScroll(
         coordinatorLayout: CoordinatorLayout, child: V, target: View, dx: Int, dy: Int, consumed: IntArray, type: Int
