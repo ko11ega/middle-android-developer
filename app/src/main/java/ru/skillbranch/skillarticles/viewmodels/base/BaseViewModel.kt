@@ -1,5 +1,4 @@
 package ru.skillbranch.skillarticles.viewmodels.base
-
 import android.os.Bundle
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
