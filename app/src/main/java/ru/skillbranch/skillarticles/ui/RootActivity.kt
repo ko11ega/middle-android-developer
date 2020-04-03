@@ -1,6 +1,5 @@
 package ru.skillbranch.skillarticles.ui
 
-import android.util.Log
 import android.os.Bundle
 import android.text.Selection
 import android.text.Spannable
@@ -11,7 +10,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -25,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_submenu.*
 import kotlinx.android.synthetic.main.search_view_layout.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
-//import ru.skillbranch.skillarticles.extensions.SetMarginOptionaly
+import ru.skillbranch.skillarticles.extensions.SetMarginOptionaly
 import ru.skillbranch.skillarticles.ui.base.BaseActivity
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
@@ -38,17 +36,16 @@ import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
 import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
-class RootActivity
-{}
-
-/*
-class RootActivity : BaseActivity<ArticleViewModel>(), IViewModelState {//IArticleView {//
+//class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {} TODO так в исходниках к уроку
+class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IViewModelState {//
 
     override val layout: Int = R.layout.activity_root
     override val viewModel: ArticleViewModel by lazy {
         val vmFactory = ViewModelFactory("0")
         ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
     }
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public override val binding: ArticleBinding by lazy { ArticleBinding()}
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val bgColor by AttrValue(R.attr.colorSecondary)
@@ -386,8 +383,4 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IViewModelState {//IArtic
 
 
 
-
-
-
 }
-*/
