@@ -33,10 +33,16 @@ import ru.skillbranch.skillarticles.ui.custom.SearchSpan
 import ru.skillbranch.skillarticles.ui.delegates.AttrValue
 import ru.skillbranch.skillarticles.ui.delegates.ObserveProp
 import ru.skillbranch.skillarticles.ui.delegates.RenderProp
-import ru.skillbranch.skillarticles.viewmodels.*
+import ru.skillbranch.skillarticles.viewmodels.ArticleState
+import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
+import ru.skillbranch.skillarticles.viewmodels.base.Notify
+import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
+class RootActivity
+{}
 
-class RootActivity : BaseActivity<ArticleViewModel>(), IArticleViewModel {
+/*
+class RootActivity : BaseActivity<ArticleViewModel>(), IViewModelState {//IArticleView {//
 
     override val layout: Int = R.layout.activity_root
     override val viewModel: ArticleViewModel by lazy {
@@ -171,7 +177,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleViewModel {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun renderNotification(notify: Notify){
+    override fun renderNotification(notify: Notify){
         val snackbar = Snackbar.make(coordinator_container, notify.message, Snackbar.LENGTH_LONG)
 
         when(notify) {
@@ -384,3 +390,4 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleViewModel {
 
 
 }
+*/
