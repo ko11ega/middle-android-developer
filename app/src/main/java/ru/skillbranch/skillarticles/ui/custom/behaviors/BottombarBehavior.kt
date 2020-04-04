@@ -30,8 +30,8 @@ class BottombarBehavior<V : View>(context: Context, attrs: AttributeSet) :
     override fun onNestedPreScroll(
         coordinatorLayout: CoordinatorLayout, child: V, target: View, dx: Int, dy: Int, consumed: IntArray, type: Int
     ) {
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
         child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
+        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
     }
 }
 

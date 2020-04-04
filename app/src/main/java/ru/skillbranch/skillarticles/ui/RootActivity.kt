@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
@@ -21,9 +22,24 @@ import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.Notify
 import ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
 
+/*
+*Сохранение состояния SearchMode
+Необходимо реализовать сохранение состояния строки поиска при изменении конфигурации устройства
+* (пересоздании Activity)
++1
+Реализуй сохранение состояния строки поиска при перевороте экрана (или переключения в DarkMode)
+actionView и строка поиска должены остаться в том же состоянии что и до переворота экрана.
+* Необходимо реализовать восстановление состояния в методе onCreateOptionsMenu
+* при этом у menuItem должен быть идентификатор R.id.action_search
+
+ */
+
+
 class RootActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ArticleViewModel
+    private var searchQuery: String? =null
+    private var isSearching = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +52,60 @@ class RootActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
         viewModel.observeState(this) {
             renderUi(it)
-            setupToolbar()
+            //setupToolbar()
+            if(it.isSearch){
+                isSearching = true
+                searchQuery = it.searchQuery
+            }
         }
 
         viewModel.observeNotifications(this) {
             renderNotification(it)
         }
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        /*
+        menuInflater.inflate(R.menu.menu_search, menu)
+        val menuItem = menu?.findItem(R.id.action_search)
+        val searchView = (menuItem?.actionView as? SearchView)
+        searchView?.queryHint = getString(R.string.article_search_placeholder)
+
+        //restore SearchView
+        if (isSearching) {
+            menuItem?.expandActionView()
+            searchView?.setQuery(searchQuery, false)
+            searchView?.clearFocus()
+
+        }
+
+        menuItem?.setOnActionExpandListener(object : MenuItem.onActionExpandListener {
+            override fun onMenuItemActionExpand(Item: MenuItem?): Boolean {
+                viewModel.handleSearchMode(true)
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                viewModel.handleSearchMode(false)
+                return true
+            }
+        })
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.handleSearch(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.handleSearch(newText)
+                return true
+            }
+        })
+        */
+        return super.onCreateOptionsMenu(menu)
+    }
+
 
     private fun renderUi(data: ArticleState){
         //bind submenu state

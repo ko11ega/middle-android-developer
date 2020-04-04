@@ -43,9 +43,11 @@ class SubmenuBehavior<V : View>(context: Context, attrs: AttributeSet) :
         Log.d("M_SubmenuBehavior","onNestedPreScroll[child] ${child.javaClass}")
         Log.d("M_SubmenuBehavior","onNestedPreScroll[child] ${child.marginRight}")
 
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
+
         //if (child.isVisible == true)
         //child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
         child.translationX = max(0f, min(child.width.toFloat()+child.marginRight, child.translationX + dy))
+        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
+
     }
 }
