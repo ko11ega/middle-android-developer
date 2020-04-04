@@ -64,9 +64,7 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
         menuInflater.inflate(R.menu.menu_search, menu)
         val menuItem = menu?.findItem(R.id.action_search)
         val searchView = (menuItem?.actionView as? SearchView)
@@ -79,7 +77,7 @@ class RootActivity : AppCompatActivity() {
             searchView?.clearFocus()
         }
 
-        menuItem?.setOnActionExpandListener(object : MenuItem.onActionExpandListener {
+        menuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(Item: MenuItem?): Boolean {
                 viewModel.handleSearchMode(true)
                 return true
@@ -90,6 +88,8 @@ class RootActivity : AppCompatActivity() {
                 return true
             }
         })
+
+
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.handleSearch(query)
