@@ -9,9 +9,19 @@ import ru.skillbranch.skillarticles.data.repositories.ArticleRepository
 import ru.skillbranch.skillarticles.extensions.data.toAppSettings
 import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
 import ru.skillbranch.skillarticles.extensions.format
-import ru.skillbranch.skillarticles.extensions.indexesOf
 import java.util.*
 
+fun String?.indexesOf(substr: String, ignoreCase: Boolean = true): List<Int> {
+    var result : MutableList<Int> = mutableListOf()
+    var matchIndex : Int = -1
+    if(this == null) return result
+    while(this.indexOf(substr, matchIndex, ignoreCase)>0) {
+        matchIndex = this.indexOf(substr, matchIndex+1, ignoreCase)
+        if (matchIndex==-1) break
+        result.add(matchIndex)
+    }
+    return result
+}
 
 class ArticleViewModel(private val articleId:String):BaseViewModel<ArticleState>(ArticleState()){
     private val repository = ArticleRepository
