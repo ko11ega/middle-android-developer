@@ -37,7 +37,7 @@ import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
 import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
 //class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {} TODO так в исходниках к уроку
-class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IViewModelState {//
+class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleViewModel {//IViewModelState {//
 
     override val layout: Int = R.layout.activity_root
     override val viewModel: ArticleViewModel by lazy {
@@ -64,7 +64,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
         //clear entry search result
         clearSearchResult()
 
-        searchResult.forEach{(start, end) ->
+        searchResult.forEach{ (start, end) ->
             content.setSpan(
                 SearchSpan(bgColor, fgColor),
                 start,
@@ -112,27 +112,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
         scroll.setMarginOptionally(bottom =dpToIntPx(0))
     }
 
-/*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_root)
-        setupToolbar()
-        setupBottomBar()
-        setupSubMenu()
-
-        val vmFactory = ViewModelFactory("0")
-        viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
-        viewModel.observeState(this) {
-            renderUi(it)
-            setupToolbar()
-        }
-
-        viewModel.observeNotifications(this) {
-            renderNotification(it)
-        }
-    }
- */
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
         val menuItem = menu?.findItem(R.id.action_search)
@@ -148,7 +127,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
             else searchView?.clearFocus()
         }
 
-        menuItem?.setOnActionExpandListener(object : MenuItem.onActionExpandListener {
+        menuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(Item: MenuItem?): Boolean {
                 viewModel.handleSearchMode(true)
                 return true
@@ -158,6 +137,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
                 viewModel.handleSearchMode(false)
                 return true
             }
+
         })
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -169,6 +149,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
                 viewModel.handleSearch(newText)
                 return true
             }
+
         })
 
         return super.onCreateOptionsMenu(menu)
@@ -176,6 +157,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
 
     override fun renderNotification(notify: Notify){
         val snackbar = Snackbar.make(coordinator_container, notify.message, Snackbar.LENGTH_LONG)
+            .setAnchorView(bottombar)
 
         when(notify) {
             is Notify.ActionMessage -> {
@@ -199,15 +181,15 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
                 }
             }
         }
+
         snackbar.show()
     }
 
     private fun setupSubMenu() {
-        btn_text_up.setOnClickListener{ viewModel.handleUpText()}
-        btn_text_down.setOnClickListener{ viewModel.handleDownText()}
-        switch_mode.setOnClickListener{ viewModel.handleNightMode()}
+        btn_text_up.setOnClickListener{ viewModel.handleUpText() }
+        btn_text_down.setOnClickListener{ viewModel.handleDownText() }
+        switch_mode.setOnClickListener{ viewModel.handleNightMode() }
     }
-
 
     private fun setupBottomBar() {
         btn_like.setOnClickListener {viewModel.handleLike() }
@@ -229,7 +211,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
             viewModel.handleSearchMode(false)
             invalidateOptionsMenu()
         }
-
     }
 
     private fun setupToolbar(){
@@ -244,6 +225,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
             it.marginEnd = dpToIntPx(16)
             logo.layoutParams = it
         }
+
     }
 
     inner class ArticleBinding : Binding() {
@@ -253,8 +235,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
         private var isLoadingContent by ObserveProp(true)
 
         private var isLike: Boolean by RenderProp(false) {btn_like.isChecked = it}
-        private var isBookmark: Boolean by RenderProp(false) {
-            btn_bookmark.isChecked = it}
+        private var isBookmark: Boolean by RenderProp(false) {btn_bookmark.isChecked = it}
         private var isShowMenu: Boolean by RenderProp(false) {
             btn_settings.isChecked = it
             if(it) submenu.open() else submenu.close()
@@ -310,11 +291,11 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
                 }
 
                 bottombar.bindSearchInfo(sr.size, sp)
+
             }
         }
 
         override fun bind(data: IViewModelState) {
-
             data as ArticleState //TODO как это работает?
 
             isLike = data.isLike
@@ -342,9 +323,28 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
         override fun restoreUI(savedState: Bundle) {
             isFocusedSearch = savedState.getBoolean(::isFocusedSearch.name)
         }
-
-
     }
+
+    /*
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_root)
+        setupToolbar()
+        setupBottomBar()
+        setupSubMenu()
+
+        val vmFactory = ViewModelFactory("0")
+        viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
+        viewModel.observeState(this) {
+            renderUi(it)
+            setupToolbar()
+        }
+
+        viewModel.observeNotifications(this) {
+            renderNotification(it)
+        }
+    }
+ */
 
 /*
     private fun renderUi(data: ArticleState){
@@ -380,7 +380,5 @@ class RootActivity : BaseActivity<ArticleViewModel>(), ArticleViewModel {//IView
 
 */
 
-
-
-
 }
+

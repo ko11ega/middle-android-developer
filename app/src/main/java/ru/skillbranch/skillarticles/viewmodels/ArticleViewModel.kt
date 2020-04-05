@@ -193,28 +193,6 @@ class ArticleViewModel(private val articleId:String)
         updateState { it.copy(isSearch = isSearch, isShowMenu = false, searchPosition = 0)}
     }
 
-    /**
-     * обрабока перехода в режим поиска searchView
-     * при нажатии на пункту меню тулбара необходимо отобразить searchView и сохранить состояние при
-     * изменении конфигурации (пересоздании активити)
-     */
-    //fun handleIsSearch(isSearch: Boolean){
-    fun handleSearchMode(isSearch: Boolean){
-        updateState { it.copy(isSearch = isSearch, isShowMenu = false, searchPosition = 0)}
-    }
-
-    /**
-     * обрабока поискового запроса, необходимо сохранить поисковый запрос и отображать его в
-     * searchView при изменении конфигурации (пересоздании активити)
-     */
-    //fun handleSearchQuery(query: String?){
-    fun handleSearch(query: String?){
-        query ?: return
-        val result = (currentState.content.firstOrNull() as? String)
-            ?.indexesOf(query)
-            ?.map {it to it + query.length }
-        updateState { it.copy(searchQuery = query, searchResults = result!!, searchPosition = 0 )}
-    }
 
     /**
      * обрабока поискового запроса, необходимо сохранить поисковый запрос и отображать его в
@@ -228,6 +206,7 @@ class ArticleViewModel(private val articleId:String)
             ?.map {it to it + query.length }
         updateState { it.copy(searchQuery = query, searchResults = result!!, searchPosition = 0 )}
     }
+
 
     fun handleUpResult() {
         updateState { it.copy(searchPosition = it.searchPosition.dec()) }
