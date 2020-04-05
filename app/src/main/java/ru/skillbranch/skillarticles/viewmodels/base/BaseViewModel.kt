@@ -1,9 +1,9 @@
 package ru.skillbranch.skillarticles.viewmodels.base
+
 import android.os.Bundle
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
-
 
 abstract class BaseViewModel<T : IViewModelState>(initState: T) : ViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)

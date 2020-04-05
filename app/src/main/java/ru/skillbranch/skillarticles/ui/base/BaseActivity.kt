@@ -1,25 +1,21 @@
 package ru.skillbranch.skillarticles.ui.base
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.BaseViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
-//import ru.skillbranch.skillarticles.viewmodels.base.ViewModelDelegate
-
 
 abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatActivity() {
-    protected abstract val binding : Binding
+    protected abstract val binding:Binding
     protected abstract val viewModel : T
-    protected abstract val layout : Int
+    protected abstract val layout:Int
 
     //set listeners, tuning views
     abstract fun setupViews()
     abstract fun renderNotification(notify: Notify)
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout)
         setupViews()
@@ -30,15 +26,13 @@ abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatA
 
     override fun onSaveInstanceState(outState: Bundle) {
         viewModel.saveState(outState)
-        binding.saveUI(outState)
+        binding.saveUi(outState)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         viewModel.restoreState(savedInstanceState)
-        binding.restoreUI(savedInstanceState)
+        binding.restoreUi(savedInstanceState)
     }
-
-
 }
