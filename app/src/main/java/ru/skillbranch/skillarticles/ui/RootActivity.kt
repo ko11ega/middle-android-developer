@@ -354,7 +354,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
     }
 */
 
-
+/*
     private fun renderUi(data: ArticleState){
 
         //bottombar.setSearchState(data.isSearch)
@@ -398,7 +398,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         toolbar.subtitle = data.category ?: "loading..."
         if(data.categoryIcon != null) toolbar.logo = getDrawable(data.categoryIcon as Int)
     }
-
+*/
 
 
 }

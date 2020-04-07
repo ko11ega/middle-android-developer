@@ -37,6 +37,7 @@
             android:layout_margin="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:saveEnabled="false"
             android:text="Loading..."
             />
     </androidx.core.widget.NestedScrollView>
@@ -52,8 +53,8 @@
         android:layout_marginBottom="8dp"
         app:layout_dodgeInsetEdges="bottom"
         android:visibility="gone"
-        tools:visibility="visible"/>
-        <!--app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.SubmenuBehavior"-->
+        tools:visibility="visible"
+        app:layout_behavior="ru.skillbranch.skillarticles.ui.custom.behaviors.SubmenuBehavior"/>
 
 
 
