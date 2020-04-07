@@ -281,9 +281,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
             tv_text_content.movementMethod = ScrollingMovementMethod()
         }
 
-        //TODO
-        override val outState: Bundle
-            get() = Bundle()
 
         override fun onFinishInflate() {
             dependsOn<Boolean, Boolean, List<Pair<Int,Int>>, Int>(
@@ -326,7 +323,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
             searchResults = data.searchResults
         }
 
-        override fun saveUi(OutState: Bundle){
+        override fun saveUi(outState: Bundle){
             outState.putBoolean(::isFocusedSearch.name, search_view?.hasFocus() ?:false)
         }
 

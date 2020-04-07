@@ -6,7 +6,6 @@ import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import kotlin.reflect.KProperty
 
 abstract class Binding {
-    abstract val outState: Bundle //TODO
     val delegates = mutableMapOf<String, RenderProp<out Any>>()
 
     abstract fun onFinishInflate()
