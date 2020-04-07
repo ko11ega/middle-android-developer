@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.layout_submenu.*
 import kotlinx.android.synthetic.main.search_view_layout.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
-import ru.skillbranch.skillarticles.extensions.SetMarginOptionaly
 import ru.skillbranch.skillarticles.ui.base.BaseActivity
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
@@ -36,14 +35,19 @@ import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
 import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
-//class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {} TODO так в исходниках к уроку
-class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleViewModel {//IViewModelState {//
+
+class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
+
 
     override val layout: Int = R.layout.activity_root
+    //override lateinit var viewModel: ArticleViewModel
+
     override val viewModel: ArticleViewModel by lazy {
         val vmFactory = ViewModelFactory("0")
         ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
     }
+
+
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override val binding: ArticleBinding by lazy { ArticleBinding()}
 
@@ -54,13 +58,15 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
 
     override fun setupViews() {
         setupToolbar()
-        setupBottomBar()
+        setupBottombar()
         setupSubMenu()
     }
 
     override fun renderSearchResult(searchResult: List<Pair<Int, Int>>){
         val content = tv_text_content.text as Spannable
-        tv_text_content.isVisible
+
+        // tv_text_content.isVisible TODO
+
         //clear entry search result
         clearSearchResult()
 
@@ -104,12 +110,12 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
 
     override fun showSearchBar(){
         bottombar.setSearchState(true)
-        scroll.setMarginOptionally(bottom =dpToIntPx(56))
+        //TODO scroll.setMarginOptionally(bottom =dpToIntPx(56))
     }
 
     override fun hideSearchBar(){
         bottombar.setSearchState(false)
-        scroll.setMarginOptionally(bottom =dpToIntPx(0))
+        //TODO scroll.setMarginOptionally(bottom =dpToIntPx(0))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -191,7 +197,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
         switch_mode.setOnClickListener{ viewModel.handleNightMode() }
     }
 
-    private fun setupBottomBar() {
+    private fun setupBottombar() {
         btn_like.setOnClickListener {viewModel.handleLike() }
         btn_bookmark.setOnClickListener {viewModel.handleBookmark() }
         btn_share.setOnClickListener { viewModel.handleShare() }
@@ -275,6 +281,10 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
             tv_text_content.movementMethod = ScrollingMovementMethod()
         }
 
+        //TODO
+        override val outState: Bundle
+            get() = Bundle()
+
         override fun onFinishInflate() {
             dependsOn<Boolean, Boolean, List<Pair<Int,Int>>, Int>(
                 ::isLoadingContent,
@@ -320,34 +330,39 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
             outState.putBoolean(::isFocusedSearch.name, search_view?.hasFocus() ?:false)
         }
 
-        override fun restoreUI(savedState: Bundle) {
+        override fun restoreUi(savedState: Bundle) {
             isFocusedSearch = savedState.getBoolean(::isFocusedSearch.name)
         }
+
     }
 
-    /*
+/*
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_root)
-        setupToolbar()
-        setupBottomBar()
-        setupSubMenu()
+        //setContentView(R.layout.activity_root)
 
-        val vmFactory = ViewModelFactory("0")
-        viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
+        //val vmFactory = ViewModelFactory("0")
+        //viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
         viewModel.observeState(this) {
             renderUi(it)
-            setupToolbar()
+            //setupToolbar() //TODO del
         }
 
         viewModel.observeNotifications(this) {
             renderNotification(it)
         }
     }
- */
+*/
 
-/*
+
     private fun renderUi(data: ArticleState){
+
+        //bottombar.setSearchState(data.isSearch)
+        if(data.isSearch) showSearchBar() else hideSearchBar()
+
+        if(data.searchResults.isNotEmpty()) renderSearchResult(data.searchResults)
+        if(data.searchResults.isNotEmpty()) renderSearchPosition(data.searchPosition)
+
         //bind submenu state
         btn_settings.isChecked = data.isShowMenu
         if(data.isShowMenu) submenu.open() else submenu.close()
@@ -370,7 +385,13 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
         }
 
         //bind content
-        tv_text_content.text = if (data.isLoadingContent) "loading" else data.content.first() as String
+        if (data.isLoadingContent){
+            tv_text_content.text = "loading"
+        } else if(tv_text_content.text == "loading"){ //don't override content
+            val content = data.content.first() as String
+            tv_text_content.setText(content, TextView.BufferType.SPANNABLE)
+            tv_text_content.movementMethod = ScrollingMovementMethod()
+        }
 
         //bind toolbar
         toolbar.title = data.title ?: "Skill Articles"
@@ -378,7 +399,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {//ArticleVi
         if(data.categoryIcon != null) toolbar.logo = getDrawable(data.categoryIcon as Int)
     }
 
-*/
+
 
 }
 
