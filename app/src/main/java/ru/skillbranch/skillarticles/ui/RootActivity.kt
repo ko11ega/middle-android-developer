@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.layout_submenu.*
 import kotlinx.android.synthetic.main.search_view_layout.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
+import ru.skillbranch.skillarticles.extensions.setMarginOptionally
 import ru.skillbranch.skillarticles.ui.base.BaseActivity
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
@@ -110,12 +111,12 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
 
     override fun showSearchBar(){
         bottombar.setSearchState(true)
-        //TODO scroll.setMarginOptionally(bottom =dpToIntPx(56))
+        scroll.setMarginOptionally(bottom =dpToIntPx(56))
     }
 
     override fun hideSearchBar(){
         bottombar.setSearchState(false)
-        //TODO scroll.setMarginOptionally(bottom =dpToIntPx(0))
+        scroll.setMarginOptionally(bottom =dpToIntPx(0))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
