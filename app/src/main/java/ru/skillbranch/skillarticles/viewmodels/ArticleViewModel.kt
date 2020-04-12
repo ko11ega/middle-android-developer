@@ -15,7 +15,6 @@ import ru.skillbranch.skillarticles.extensions.indexesOf
 import ru.skillbranch.skillarticles.viewmodels.base.BaseViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
-import java.util.*
 
 fun String?.indexesOf(substr: String, ignoreCase: Boolean = true): List<Int> {
     var result : MutableList<Int> = mutableListOf()
