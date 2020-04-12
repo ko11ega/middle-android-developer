@@ -1,13 +1,8 @@
-package ru.skillbranch.skillarticles.viewmodels.base.delegates
+package ru.skillbranch.skillarticles.viewmodels.base
 
-import android.content.res.Resources
-import android.os.Bundle
-import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

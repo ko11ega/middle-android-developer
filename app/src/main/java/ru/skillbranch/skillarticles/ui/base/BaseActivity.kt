@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.BaseViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
-import ru.skillbranch.skillarticles.viewmodels.base.delegates.ViewModelDelegate
+import ru.skillbranch.skillarticles.viewmodels.base.ViewModelDelegate
 
 abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatActivity() {
     protected abstract val binding:Binding
