@@ -78,7 +78,7 @@ class ArticleViewModel(private val articleId:String)
      * Получение полной информации о статье из сети
      * (или базы данных если она сохранена, наличие статьи в базе не надо реализовывать в данном уроке)
      */
-    override fun getArticleContent(): LiveData<List<Any>?>{
+    override fun getArticleContent(): LiveData<String?> {
         return repository.loadArticleContent(articleId)
     }
 
@@ -200,7 +200,7 @@ class ArticleViewModel(private val articleId:String)
     //fun handleSearchQuery(query: String?){
     override fun handleSearch(query: String?){
         query ?: return
-        val result = (currentState.content.firstOrNull() as? String)
+        val result = currentState.content
             ?.indexesOf(query)
             ?.map {it to it + query.length }
         updateState { it.copy(searchQuery = query, searchResults = result!!, searchPosition = 0 )}
@@ -236,7 +236,7 @@ data class ArticleState(
     val date: String? = null,// publication date
     val author: Any? = null, //author of article
     val poster: String? = null, //cover of article
-    val content: List<Any> = emptyList(),//content
+    val content: String? = null,//content
     val reviews: List<Any> = emptyList()
 ) : IViewModelState {
     override fun save(outState: Bundle) {
