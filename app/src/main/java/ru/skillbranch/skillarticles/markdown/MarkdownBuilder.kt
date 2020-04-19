@@ -21,7 +21,6 @@ class MarkdownBuilder(context: Context) {
     private val colorOnSurface = context.attrValue(R.attr.colorOnSurface)
     private val colorSurface = context.attrValue(R.attr.colorSurface)
 
-
     private val gap: Float = context.dpToPx(8)
     private val bulletRadius = context.dpToPx(4)
     private val quoteWidth = context.dpToPx(4)
