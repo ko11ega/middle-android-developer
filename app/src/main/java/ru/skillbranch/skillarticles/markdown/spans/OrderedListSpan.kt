@@ -51,64 +51,22 @@ class OrderedListSpan(
             // order
             paint.withCustomColor {
                 canvas.drawText(
-                    order,//+" ",
-                    //0,
-                    //(order.length).toInt(),
-                    gapWidth,
+                    order,
+                    currentMarginLocation + gapWidth,
                     lineBaseline.toFloat(),
                     paint
                 )
             }
         }
-/*
-        paint.withCustomColor {
-            canvas.drawCircle(
-                gapWidth + currentMarginLocation + gapWidth,
-                (lineTop + lineBottom) / 2f,
-                gapWidth,
-                paint
-            )
-        }
-*/
-/*
-        if(isFirstLine){
-            // order
-            paint.withCustomColor {
-                canvas.drawText(order, 0, (order.length.inc() * gapWidth).toInt(), 0f, lineBottom.toFloat(), paint)
-            }
-
-            // text
-            paint.withCustomColor {
-                canvas.drawText(text, start, end, textStart, y.toFloat(), paint)
-            }
-
-
-
-            paint.withCustomColor {
-                canvas.drawCircle(
-                    gapWidth + currentMarginLocation + gapWidth,
-                    (lineTop + lineBottom) / 2f,
-                    gapWidth,
-                    paint
-                )
-            }
-        }
- */
     }
 
     private inline fun Paint.withCustomColor(block: () -> Unit) {
         val oldColor = color
-        val oldStyle = style
 
         color = orderColor
-        style = Paint.Style.FILL
 
         block()
 
         color = oldColor
-        style = oldStyle
-
     }
-
-
 }

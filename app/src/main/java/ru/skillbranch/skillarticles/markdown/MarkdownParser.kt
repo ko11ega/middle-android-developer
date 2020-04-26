@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 
 object MarkdownParser {
 
-    private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
+    private val LINE_SEPARATOR = "\n"//System.getProperty("line.separator") ?:
 
     //group regex
     private const val UNORDERED_LIST_ITEM_GROUP = "(^[*+-] .+)"
@@ -17,14 +17,14 @@ object MarkdownParser {
     private const val RULE_GROUP = "(^[-_*]{3}$)"
     private const val INLINE_GROUP = "((?<!`)`[^`\\s].*?[^`\\s]?`(?!`))"
     private const val LINK_GROUP = "(\\[[^\\[\\]]*?]\\(.+?\\)|^\\[*?]\\(.+?\\))"
-    private const val ORDER_LIST_GROUP = "(^\\d{1,1}\\. .+$)"
-    private const val BLOCK_CODE_GROUP = "" //TODO implement me
+    private const val ORDER_LIST_GROUP = "(^\\d{1,2}\\.\\s.+?$)"
+    private const val BLOCK_CODE_GROUP = "(^```(\\s|\\S)+?```$)"
 
 
     //result regex
     private const val MARKDOWN_GROUPS = "$UNORDERED_LIST_ITEM_GROUP|$HEADER_GROUP|$QUOTE_GROUP" +
             "|$ITALIC_GROUP|$BOLD_GROUP|$STRIKE_GROUP|$RULE_GROUP|$INLINE_GROUP|$LINK_GROUP"+
-    "|$ORDER_LIST_GROUP" //|$BLOCK_CODE_GROUP optionally
+    "|$ORDER_LIST_GROUP|$BLOCK_CODE_GROUP"
 
     private val elementsPattern by lazy { Pattern.compile(MARKDOWN_GROUPS, Pattern.MULTILINE) }
 
@@ -65,15 +65,15 @@ object MarkdownParser {
         var result = ""
         list.forEach {
             if (it.elements.isNotEmpty()) {
-                println("it.elements.isNotEmpty() >> ${it}")
+                //println("it.elements.isNotEmpty() >> ${it}")
                 it.elements.forEach {
-                    println("it.elements.forEach find >> ${it}")
+                    //println("it.elements.forEach find >> ${it}")
                     if(it.elements.isEmpty())
                         result += "${(it as Element).text}"
                     else result += getTextFromElements((it as Element).elements)
                 }
             } else {
-                println("text find >> ${it}")
+                //println("text find >> ${it}")
                 result += "${(it as Element).text}"
             }
         }
@@ -108,7 +108,7 @@ object MarkdownParser {
             }
 
             var text: CharSequence
-            val groups = 1..10
+            val groups = 1..11
             var group = -1
             for (gr in groups) {
                 if (matcher.group(gr) != null) {
@@ -217,9 +217,11 @@ object MarkdownParser {
                 }
                 //ORDERED LIST
                 10 -> {
-                    //text without "\\d{1,1}. "
-                    text = string.subSequence(startIndex.plus(3), endIndex)
-                    val order = string.subSequence(startIndex, startIndex+2) as String
+                    //text without "\\d{1,2}. "
+                    var reg = "(^\\d{1,2}.)".toRegex().find(string.substring(startIndex, endIndex))
+                    val order = reg!!.value
+                    text = string.subSequence(startIndex.plus(order.length.inc()), endIndex).toString()
+
                     //find inner elements
                     val subs = findElements(text)
                     val element = Element.OrderedListItem(order, text, subs)
@@ -228,7 +230,37 @@ object MarkdownParser {
                     //next find start from position "endIndex" (last regexp character)
                     lastStartIndex = endIndex
                 }
+                //BLOCKCODE
+                11 -> {
+                    //text without "```{}```"
+                    text = string.subSequence(startIndex.plus(3), endIndex.plus(-3)).toString()
 
+                    if (text.contains(LINE_SEPARATOR)){
+                        for ((index, line) in text.lines().withIndex()){
+                            when(index){
+                                text.lines().lastIndex -> parents.add(
+                                    Element.BlockCode(
+                                        Element.BlockCode.Type.END,
+                                        line
+                                    )
+                                )
+                                0 -> parents.add(
+                                    Element.BlockCode(
+                                        Element.BlockCode.Type.START,
+                                        line + LINE_SEPARATOR
+                                    )
+                                )
+                                else -> parents.add(
+                                    Element.BlockCode(
+                                        Element.BlockCode.Type.MIDDLE,
+                                        line + LINE_SEPARATOR
+                                    )
+                                )
+                            }
+                        }
+                    } else parents.add(Element.BlockCode(Element.BlockCode.Type.SINGLE, text))
+                    lastStartIndex = endIndex
+                }
             }
         }
 
