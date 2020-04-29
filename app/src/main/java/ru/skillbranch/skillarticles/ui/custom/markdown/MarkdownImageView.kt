@@ -145,9 +145,14 @@ class MarkdownImageView private constructor(
     public override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var usedHeight = 0
         val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
-        measureChild(iv_image, widthMeasureSpec, heightMeasureSpec)
-        measureChild(tv_title, widthMeasureSpec, heightMeasureSpec)
-        if (tv_alt != null) measureChild(tv_alt, widthMeasureSpec, heightMeasureSpec)
+
+        //create measureSpec for children EXACTLY
+        //all children width == parent width (constraint parent width)
+        val ms =MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+
+        iv_image.measure(ms, heightMeasureSpec)
+        tv_title.measure(ms, heightMeasureSpec)
+        tv_alt?.measure(ms, heightMeasureSpec)
 
         usedHeight += iv_image.measuredHeight
         usedHeight += titleTopMargin
@@ -242,7 +247,15 @@ class AspectRatioResizeTransform : BitmapTransformation() {
         outWidth: Int,
         outHeight: Int
     ): Bitmap {
-        //TODO implement me
+        val originWidth = toTransform.width
+        val originHeight = toTransform.height
+        val aspectRatio = originWidth.toFloat()/originHeight
+        return Bitmap.createScaledBitmap(
+            toTransform,
+            outWidth,
+            (outWidth/aspectRatio).toInt(),
+            true
+        )
     }
 
     override fun equals(other: Any?): Boolean {
