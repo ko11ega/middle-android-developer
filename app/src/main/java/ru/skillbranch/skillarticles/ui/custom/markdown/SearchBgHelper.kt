@@ -12,6 +12,8 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.text.getSpans
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.attrValue
+import ru.skillbranch.skillarticles.extensions.data.getLineBottomWithoutPadding
+import ru.skillbranch.skillarticles.extensions.data.getLineTopWithoutPadding
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.dpToPx
 import ru.skillbranch.skillarticles.ui.custom.spans.HeaderSpan
@@ -89,7 +91,7 @@ class SearchBgHelper(
     private val multiLineRender: SearchBgRender = MultiLineRender(padding, drawableLeft, drawableMiddle, drawableRight)
 
     private lateinit var  spans: Array<out SearchSpan>
-    private lateinit var  headeSpans: Array<out HeaderSpan>
+    private lateinit var  headerSpans: Array<out HeaderSpan>
 
     private  var spanStart = 0
     private  var spanEnd = 0
@@ -113,21 +115,21 @@ class SearchBgHelper(
                 focusListener!!.invoke(layout.getLineTop(startLine), layout.getLineBottom(startLine))
             }
 
-            headeSpans = text.getSpans(spanStart, spanEnd, HeaderSpan::class.java)
+            headerSpans = text.getSpans(spanStart, spanEnd, HeaderSpan::class.java)
 
             topExtraPadding = 0
             bottomExtraPadding = 0
 
-            if (headeSpans.isNotEmpty()){
+            if (headerSpans.isNotEmpty()){
                 topExtraPadding =
                     if (spanStart in headerSpans[0].firstLineBounds
                         || spanEnd in headerSpans[0].firstLineBounds
-                    ) headeSpans[0].topExtraPadding else 0
+                    ) headerSpans[0].topExtraPadding else 0
 
                 bottomExtraPadding =
                     if (spanStart in headerSpans[0].lastLineBounds
                         || spanEnd in headerSpans[0].lastLineBounds
-                    ) headeSpans[0].bottomExtraPadding else 0
+                    ) headerSpans[0].bottomExtraPadding else 0
             }
 
             startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
@@ -168,7 +170,7 @@ abstract class SearchBgRender(
     }
 
     fun getLineBottom(layout: Layout, line: Int): Int {
-        return getLineBottomWithoutPadding(line)
+        return layout.getLineBottomWithoutPadding(line)
     }
 }
 
