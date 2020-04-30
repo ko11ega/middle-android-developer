@@ -8,11 +8,13 @@ import androidx.lifecycle.LiveData
 import ru.skillbranch.skillarticles.data.ArticleData
 import ru.skillbranch.skillarticles.data.ArticlePersonalInfo
 import ru.skillbranch.skillarticles.data.repositories.ArticleRepository
+import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.data.toAppSettings
 import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
 import ru.skillbranch.skillarticles.extensions.format
 import ru.skillbranch.skillarticles.extensions.indexesOf
 import ru.skillbranch.skillarticles.data.repositories.MarkdownParser
+import ru.skillbranch.skillarticles.data.repositories.clearContent
 import ru.skillbranch.skillarticles.viewmodels.base.BaseViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
@@ -80,7 +82,7 @@ class ArticleViewModel(private val articleId:String)
      * Получение полной информации о статье из сети
      * (или базы данных если она сохранена, наличие статьи в базе не надо реализовывать в данном уроке)
      */
-    override fun getArticleContent(): LiveData<String?> {
+    override fun getArticleContent(): LiveData<List<MarkdownElement>?> {
         return repository.loadArticleContent(articleId)
     }
 
@@ -202,7 +204,8 @@ class ArticleViewModel(private val articleId:String)
     //fun handleSearchQuery(query: String?){
     override fun handleSearch(query: String?){
         query ?: return
-        if(clearContent ==null) clearContent = MarkdownParser.clear(currentState.content)
+        if(clearContent ==null && currentState.content.isNotEmpty())
+            clearContent = currentState.content.clearContent()
         val result = clearContent
             .indexesOf(query)
             .map {it to it + query.length }
@@ -217,7 +220,13 @@ class ArticleViewModel(private val articleId:String)
     fun handleDownResult() {
         updateState { it.copy(searchPosition = it.searchPosition.inc()) }
     }
+
+    fun handleCopyCode() {
+        notify(Notify.TextMessage("Code copy to clipboard"))
+    }
 }
+
+
 
 data class ArticleState(
     val isAuth:Boolean = false, //user was authorized
@@ -239,7 +248,7 @@ data class ArticleState(
     val date: String? = null,// publication date
     val author: Any? = null, //author of article
     val poster: String? = null, //cover of article
-    val content: String? = null,//content
+    val content: List<MarkdownElement> = emptyList(),//content
     val reviews: List<Any> = emptyList()
 ) : IViewModelState {
     override fun save(outState: Bundle) {
