@@ -13,7 +13,11 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "ru.skillbranch.skillarticles.CustomTestRunner"
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
 
     buildTypes {
@@ -55,10 +59,4 @@ dependencies {
     androidTestImplementation "android.arch.core:core-testing:1.1.1"
 }
 
-defaultConfig {
-    testInstrumentationRunner "ru.skillbranch.skillarticles.CustomTestRunner"
-}
-compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-}
+
