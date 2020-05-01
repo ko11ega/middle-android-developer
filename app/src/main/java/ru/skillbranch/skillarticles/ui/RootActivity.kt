@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.layout_submenu.*
 import kotlinx.android.synthetic.main.search_view_layout.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
-import ru.skillbranch.skillarticles.ui.custom.markdown.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.hideKeyboard
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
@@ -48,25 +47,10 @@ import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
 
 class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
 
-
     override val layout: Int = R.layout.activity_root
-    //override lateinit var viewModel: ArticleViewModel
-
-    override val viewModel: ArticleViewModel by lazy {
-        val vmFactory = ViewModelFactory("0")
-        ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
-    }
-
-
+    override val viewModel: ArticleViewModel by provideViewModel("0")
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override val binding: ArticleBinding by lazy { ArticleBinding()}
-
-    /*
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val bgColor by AttrValue(R.attr.colorSecondary)
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val fgColor by AttrValue(R.attr.colorOnSecondary)
-*/
 
     override fun setupViews() {
         setupToolbar()
@@ -82,7 +66,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
 
          */
     }
-
+/*
     override fun renderSearchResult(searchResult: List<Pair<Int, Int>>){
         val content = tv_text_content.text as Spannable
         tv_text_content.isVisible
@@ -123,7 +107,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         content.getSpans<SearchSpan>()
             .forEach { content.removeSpan(it) }
     }
-
+*/
     override fun showSearchBar(){
         bottombar.setSearchState(true)
         scroll.setMarginOptionally(bottom =dpToIntPx(56))
@@ -321,14 +305,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
             tv_text_content.setContent(it)
             if (it.isNotEmpty()) setupCopyListener()
 
-
-            /*MarkdownBuilder(this@RootActivity)
-                .markdownToSpan(it)
-                .run{
-                    tv_text_content.setText(this, TextView.BufferType.SPANNABLE)
-                }
-
-            tv_text_content.movementMethod = LinkMovementMethod.getInstance()*/
         }
 
 
@@ -342,12 +318,9 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
                 if(!ilc && iss){
                     tv_text_content.renderSearchResult(sr)
                     tv_text_content.renderSearchPosition(sr.getOrNull(sp))
-                    //renderSearchResult(sr)
-                    //renderSearchPosition(sp)
                 }
                 if(!ilc && !iss){
                     tv_text_content.clearSearchResult()
-                    //clearSearchResult()
                 }
 
                 bottombar.bindSearchInfo(sr.size, sp)
@@ -356,7 +329,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         }
 
         override fun bind(data: IViewModelState) {
-            data as ArticleState //TODO как это работает?
+            data as ArticleState
 
             isLike = data.isLike
             isBookmark = data.isBookmark
@@ -367,7 +340,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
             if (data.title != null) title =data.title
             if (data.category != null) category = data.category
             if (data.categoryIcon != null) categoryIcon = data.categoryIcon as Int
-            content = data.content//.first() as String
+            content = data.content
 
             isLoadingContent = data.isLoadingContent
             isSearch = data.isSearch
@@ -385,71 +358,5 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         }
 
     }
-
-/*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_root)
-
-        //val vmFactory = ViewModelFactory("0")
-        //viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
-        viewModel.observeState(this) {
-            renderUi(it)
-            //setupToolbar() //TODO del
-        }
-
-        viewModel.observeNotifications(this) {
-            renderNotification(it)
-        }
-    }
-*/
-
-/*
-    private fun renderUi(data: ArticleState){
-
-        //bottombar.setSearchState(data.isSearch)
-        if(data.isSearch) showSearchBar() else hideSearchBar()
-
-        if(data.searchResults.isNotEmpty()) renderSearchResult(data.searchResults)
-        if(data.searchResults.isNotEmpty()) renderSearchPosition(data.searchPosition)
-
-        //bind submenu state
-        btn_settings.isChecked = data.isShowMenu
-        if(data.isShowMenu) submenu.open() else submenu.close()
-
-        //bind article person data
-        btn_like.isChecked = data.isLike
-        btn_bookmark.isChecked = data.isBookmark
-
-        //bind submenu views
-        switch_mode.isChecked = data.isDarkMode
-        delegate.localNightMode = if(data.isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        if(data.isBigText) {
-            tv_text_content.textSize = 18f
-            btn_text_up.isChecked = true
-            btn_text_down.isChecked = false
-        } else {
-            tv_text_content.textSize = 14f
-            btn_text_up.isChecked = false
-            btn_text_down.isChecked = true
-        }
-
-        //bind content
-        if (data.isLoadingContent){
-            tv_text_content.text = "loading"
-        } else if(tv_text_content.text == "loading"){ //don't override content
-            val content = data.content.first() as String
-            tv_text_content.setText(content, TextView.BufferType.SPANNABLE)
-            tv_text_content.movementMethod = ScrollingMovementMethod()
-        }
-
-        //bind toolbar
-        toolbar.title = data.title ?: "Skill Articles"
-        toolbar.subtitle = data.category ?: "loading..."
-        if(data.categoryIcon != null) toolbar.logo = getDrawable(data.categoryIcon as Int)
-    }
-*/
-
-
 }
 

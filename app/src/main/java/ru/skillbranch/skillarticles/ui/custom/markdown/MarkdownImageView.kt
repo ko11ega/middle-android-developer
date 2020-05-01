@@ -13,6 +13,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -20,6 +21,7 @@ import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.attrValue
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.dpToPx
+import ru.skillbranch.skillarticles.extensions.setPaddingOptionally
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import kotlin.math.hypot
@@ -76,10 +78,8 @@ class MarkdownImageView private constructor(
     }
 
     init {
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         iv_image = ImageView(context).apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            setImageResource(R.drawable.ic_launcher_background)
             outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
                     outline.setRoundRect(
@@ -92,13 +92,11 @@ class MarkdownImageView private constructor(
         }
         addView(iv_image)
 
-        tv_title = MarkdownTextView(context).apply {
-            setText("title", TextView.BufferType.SPANNABLE)
+        tv_title = MarkdownTextView(context,fontSize * 0.75f).apply {
             setTextColor(colorOnBackground)
             gravity = Gravity.CENTER
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
-            setPaddingOptonally(left = titlePadding, right = titlePadding)
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            setPaddingOptionally(left = titlePadding, right = titlePadding)
         }
 
         addView(tv_title)
@@ -200,7 +198,7 @@ class MarkdownImageView private constructor(
         canvas.drawLine(
             canvas.width - titlePadding.toFloat(),
             linePositionY,
-            titlePadding.toFloat(),
+            canvas.width.toFloat(),
             linePositionY,
             linePaint
         )
@@ -238,7 +236,7 @@ class AspectRatioResizeTransform : BitmapTransformation() {
         "ru.skillbranch.skillarticles.glide.AspectRatioResizeTransform" //any unique string
     private val ID_BYTES = ID.toByteArray(Charset.forName("UTF-8"))
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
-        //TODO implement me
+        messageDigest.update(ID_BYTES)
     }
 
     override fun transform(
@@ -258,11 +256,7 @@ class AspectRatioResizeTransform : BitmapTransformation() {
         )
     }
 
-    override fun equals(other: Any?): Boolean {
-        //TODO implement me
-    }
+    override fun equals(other: Any?): Boolean = other is AspectRatioResizeTransform
 
-    override fun hashCode(): Int {
-        //TODO implement me
-    }
+    override fun hashCode(): Int = ID.hashCode()
 }

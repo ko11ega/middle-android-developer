@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.core.view.children
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
+import ru.skillbranch.skillarticles.extensions.groupByBounds
+import ru.skillbranch.skillarticles.extensions.setPaddingOptionally
 import kotlin.properties.Delegates
 
 class MarkdownContentView @JvmOverloads constructor(
@@ -121,7 +123,6 @@ class MarkdownContentView @JvmOverloads constructor(
         if (searchResult.isEmpty()) return
 
         val bounds = elements.map {it.bounds}
-        // TODO ext/List.kt video:2:07:18
         val result = searchResult.groupByBounds(bounds)
 
         children.forEachIndexed{ index, view ->
