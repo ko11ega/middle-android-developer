@@ -14,9 +14,9 @@ object MarkdownParser {
     private const val RULE_GROUP = "(^[-_*]{3}$)"
     private const val INLINE_GROUP = "((?<!`)`[^`\\s].*?[^`\\s]?`(?!`))"
     private const val LINK_GROUP = "(\\[[^\\[\\]]*?]\\(.+?\\)|^\\[*?]\\(.+?\\))"
-    private const val BLOCK_CODE_GROUP = "(^```(\\s|\\S)+?```$)" //TODO ERROR "(^```[\\s\\S]+?```$)"
+    private const val BLOCK_CODE_GROUP = "(^```[\\s\\S]+?```$)"//"(^```(\\s|\\S)+?```$)" //TODO app ERROR
     private const val ORDER_LIST_GROUP = "(^\\d{1,2}\\.\\s.+?$)"
-    private const val IMAGE_GROUP = "(^!\\[[^\\[\\]]*?\\]\\(.*?\\)$)" //group 12 //"(^!\\[([^\[\\]]*?)?]\\((.*?) \\"(.*?)\\"\\)$)"
+    private const val IMAGE_GROUP = "(^!\\[[^\\[\\]]*?\\]\\(.*?\\)$)" //"^!\\[([^\\[\\]]*?)?]\\((.*?) \"(.*?)\"\\)$"  //group 12
 
     //result regex
     private const val MARKDOWN_GROUPS = "$UNORDERED_LIST_ITEM_GROUP|$HEADER_GROUP|$QUOTE_GROUP" +
@@ -87,7 +87,7 @@ object MarkdownParser {
             //found text
             var text: CharSequence
 
-            //groups range for iterate by grouups
+            //groups range for iterate by groups
             val groups = 1..12
             var group = -1
             for (gr in groups) {
@@ -171,7 +171,7 @@ object MarkdownParser {
                 //BOLD
                 5 -> {
                     //text without "**{}**"
-                    text = string.subSequence(startIndex.inc().inc(), endIndex.dec().dec())
+                    text = string.subSequence(startIndex.plus(2), endIndex.plus(-2))
                     val subs =
                         findElements(
                             text
