@@ -34,13 +34,15 @@ class MarkdownContentView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var usedHeight = paddingTop
-        val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
+        val width = getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
 
         children.forEach {
             measureChild(it, widthMeasureSpec, heightMeasureSpec)
-            usedHeight += paddingBottom
-            setMeasuredDimension(width, usedHeight)
+            usedHeight += it.measuredHeight
+
         }
+        usedHeight += paddingBottom
+        setMeasuredDimension(width, usedHeight)
     }
 
 

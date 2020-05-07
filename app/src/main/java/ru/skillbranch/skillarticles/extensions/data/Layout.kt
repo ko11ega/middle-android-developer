@@ -26,7 +26,7 @@ fun Layout.getLineTopWithoutPadding(line: Int): Int {
 Returns the bottom of the Layout after removing the extra padding applied by the Layout.
  */
 fun Layout.getLineBottomWithoutPadding(line: Int): Int {
-    var lineBottom = getLineBottomWithoutPadding(line)
+    var lineBottom = getLineBottomWithoutSpacing(line)
     if (line == lineCount.dec()) {
         lineBottom -= bottomPadding
     }
@@ -43,6 +43,6 @@ fun Layout.getLineBottomWithoutSpacing(line: Int): Int {
     return if (!hasLineSpacing || isLastLine) {
         lineBottom
     } else {
-        lineBottom -spacingAdd.toInt()
+        lineBottom - spacingAdd.toInt()
     }
 }
