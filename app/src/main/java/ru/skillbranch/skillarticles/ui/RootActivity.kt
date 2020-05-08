@@ -1,24 +1,16 @@
 package ru.skillbranch.skillarticles.ui
-
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
-import android.text.Selection
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.text.getSpans
-import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_root.*
@@ -30,20 +22,14 @@ import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.hideKeyboard
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
-import ru.skillbranch.skillarticles.ui.custom.markdown.MarkdownBuilder
 import ru.skillbranch.skillarticles.ui.base.BaseActivity
 import ru.skillbranch.skillarticles.ui.base.Binding
-import ru.skillbranch.skillarticles.ui.custom.markdown.MarkdownImageView
-import ru.skillbranch.skillarticles.ui.custom.spans.SearchFocusSpan
-import ru.skillbranch.skillarticles.ui.custom.spans.SearchSpan
-import ru.skillbranch.skillarticles.ui.delegates.AttrValue
 import ru.skillbranch.skillarticles.ui.delegates.ObserveProp
 import ru.skillbranch.skillarticles.ui.delegates.RenderProp
 import ru.skillbranch.skillarticles.viewmodels.ArticleState
 import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
-import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
 
 class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
 
@@ -56,58 +42,8 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         setupToolbar()
         setupBottombar()
         setupSubMenu()
-
-        /*scroll.addView(MarkdownImageView(
-            this,
-            14f,
-            "https://www.nathab.com/uploaded-files/carousels/HERO/Alaska-North/Iceland-shutterstock_596465372.jpg",
-            "Iceland",
-            "it is Iceland"))
-
-         */
-    }
-/*
-    override fun renderSearchResult(searchResult: List<Pair<Int, Int>>){
-        val content = tv_text_content.text as Spannable
-        tv_text_content.isVisible
-        //clear entry search result
-        clearSearchResult()
-
-        searchResult.forEach{ (start, end) ->
-            content.setSpan(
-                SearchSpan(),
-                start,
-                end,
-                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
     }
 
-    override fun renderSearchPosition(searchPosition: Int) {
-        val content = tv_text_content.text as Spannable
-
-        val spans = content.getSpans<SearchSpan>()
-        //clear last search position
-        content.getSpans<SearchFocusSpan>().forEach { content.removeSpan(it) }
-        if (spans.isNotEmpty()) {
-            //find position span
-            val result = spans[searchPosition]
-            Selection.setSelection(content, content.getSpanStart(result))
-            content.setSpan(
-                SearchFocusSpan(),
-                content.getSpanStart(result),
-                content.getSpanEnd(result),
-                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-    }
-
-    override fun clearSearchResult(){
-        val content = tv_text_content.text as Spannable
-        content.getSpans<SearchSpan>()
-            .forEach { content.removeSpan(it) }
-    }
-*/
     override fun showSearchBar(){
         bottombar.setSearchState(true)
         scroll.setMarginOptionally(bottom =dpToIntPx(56))
@@ -117,6 +53,7 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         bottombar.setSearchState(false)
         scroll.setMarginOptionally(bottom =dpToIntPx(0))
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
@@ -307,7 +244,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
 
         }
 
-
         override fun onFinishInflate() {
             dependsOn<Boolean, Boolean, List<Pair<Int,Int>>, Int>(
                 ::isLoadingContent,
@@ -356,7 +292,6 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
         override fun restoreUi(savedState: Bundle) {
             isFocusedSearch = savedState.getBoolean(::isFocusedSearch.name)
         }
-
     }
 }
 
