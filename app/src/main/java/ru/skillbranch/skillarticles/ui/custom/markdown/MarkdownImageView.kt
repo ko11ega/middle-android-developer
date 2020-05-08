@@ -26,7 +26,6 @@ import java.nio.charset.Charset
 import java.security.MessageDigest
 import kotlin.math.hypot
 
-
 @SuppressLint("ViewConstructor")
 class MarkdownImageView private constructor(
     context: Context,
@@ -65,10 +64,9 @@ class MarkdownImageView private constructor(
     @ColorInt
     private val colorOnSurface: Int = context.attrValue(R.attr.colorOnSurface)///colorOnSurface
     @ColorInt
-    private val colorOnBackground: Int =
-        context.attrValue(R.attr.colorOnBackground)///colorOnBackground
+    private val colorOnBackground: Int = context.attrValue(R.attr.colorOnBackground)///colorOnBackground
     @ColorInt
-    private var lineColor: Int = context.attrValue(R.color.color_divider)//R.color.color_divider
+    private var lineColor: Int = context.attrValue(R.attr.colorOnBackground) //TODO context.attrValue(R.color.color_divider)//R.color.color_divider
 
     //for draw object allocation
     private var linePositionY: Float = 0f
@@ -109,8 +107,10 @@ class MarkdownImageView private constructor(
         title: CharSequence,
         alt: String?
     ) : this(context, fontSize) {
+
         imageUrl = url
         imageTitle = title
+
         tv_title.setText(title, TextView.BufferType.SPANNABLE)
 
         Glide
@@ -129,12 +129,12 @@ class MarkdownImageView private constructor(
                 setPadding(titleTopMargin)
                 isVisible = false
             }
-        }
+            addView(tv_alt)
 
-        addView(tv_alt)
-        iv_image.setOnClickListener{
-            if(tv_alt?.isVisible ==true) animateHideAlt()
-            else animateShowAlt()
+            iv_image.setOnClickListener{
+                if(tv_alt?.isVisible ==true) animateHideAlt()
+                else animateShowAlt()
+            }
         }
     }
 
@@ -189,12 +189,20 @@ class MarkdownImageView private constructor(
             right,
             iv_image.measuredHeight
         )
+
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        canvas.drawLine(0f, linePositionY, titlePadding.toFloat(), linePositionY, linePaint)
+        canvas.drawLine(
+            0f,
+            linePositionY,
+            titlePadding.toFloat(),
+            linePositionY,
+            linePaint
+        )
+
         canvas.drawLine(
             canvas.width - titlePadding.toFloat(),
             linePositionY,
