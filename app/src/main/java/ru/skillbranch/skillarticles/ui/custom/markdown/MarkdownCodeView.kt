@@ -1,9 +1,7 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.text.Selection
@@ -103,6 +101,7 @@ class MarkdownCodeView private constructor(
             isHorizontalFadingEdgeEnabled = true
             scrollBarSize = scrollBarHeight
             setFadingEdgeLength(fadingOffset)
+            //TODO? add code text to scroll
             addView(tv_codeView)
         }
 
@@ -151,7 +150,6 @@ class MarkdownCodeView private constructor(
 
         usedHeight += sv_scroll.measuredHeight + paddingTop + paddingBottom
         setMeasuredDimension(width, usedHeight)
-
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
@@ -177,11 +175,19 @@ class MarkdownCodeView private constructor(
                 iv_copy.right - (1.5f*iconSize).toInt(),
                 iconHeight + iconSize
             )
+
         } else {
             iv_copy.layout(
                 right - iconSize,
                 usedHeight,
                 right,
+                usedHeight + iconSize
+            )
+
+            iv_switch.layout(
+                iv_copy.right - (2.5f*iconSize).toInt(),
+                usedHeight,
+                iv_copy.right - (1.5f*iconSize).toInt(),
                 usedHeight + iconSize
             )
         }
