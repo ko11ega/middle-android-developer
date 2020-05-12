@@ -1,5 +1,4 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -38,12 +37,15 @@ class MarkdownTextView constructor(
 
     private var searchBgHelper  = SearchBgHelper(context) { top, bottom ->
         focusRect.set(0, top -context.dpToIntPx(56), width, bottom + context.dpToIntPx(56))
+        //show rect on view with animation
         requestRectangleOnScreen(focusRect, false)
+
     }
 
     init {
         searchBgHelper = mockHelper ?: SearchBgHelper(context) { top, bottom ->
             focusRect.set(0, top - context.dpToIntPx(56), width, bottom + context.dpToIntPx(56))
+            //show rect on view with animation
             requestRectangleOnScreen(focusRect, false)
         }
         setTextColor(color)
