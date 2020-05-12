@@ -211,7 +211,7 @@ class MarkdownContentView @JvmOverloads constructor(
         constructor(parcel: Parcel) : this() {
             ids = parcel.readArrayList(Int::class.java.classLoader) as ArrayList<Int>
             container =
-                parcel.readSparseArray(this::class.java.classLoader) as SparseArray<Parcelable>
+                parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable>
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
