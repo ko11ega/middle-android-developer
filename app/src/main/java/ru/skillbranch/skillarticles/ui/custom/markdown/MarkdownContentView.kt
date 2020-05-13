@@ -111,8 +111,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.image.alt
                     )
                     addView(iv)
-                    //layoutManager.attachToParent(iv, index) //TODO
-                    //index++ //TODO
+                    layoutManager.attachToParent(iv, index) //TODO
+                    index++ //TODO
                 }
 
                 is MarkdownElement.Scroll -> {
@@ -122,8 +122,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.blockCode.text
                     )
                     addView(sv)
-                    //layoutManager.attachToParent(sv, index) //TODO
-                    //index++ //TODO
+                    layoutManager.attachToParent(sv, index) //TODO
+                    index++ //TODO
                 }
             }
         }
@@ -211,7 +211,7 @@ class MarkdownContentView @JvmOverloads constructor(
         constructor(parcel: Parcel) : this() {
             ids = parcel.readArrayList(Int::class.java.classLoader) as ArrayList<Int>
             container =
-                parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable>
+                parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable> //<Parcelable>
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
