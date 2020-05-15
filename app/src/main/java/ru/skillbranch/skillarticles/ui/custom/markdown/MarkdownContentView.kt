@@ -247,13 +247,13 @@ private class LayoutManager() : Parcelable {
         Log.e("MarkdownContentView", "parcel: $ids.");
 //            ids = arr.toMutableList()
         container =
-            parcel.readSparseArray(this::class.java.classLoader) as SparseArray<Parcelable> //<Parcelable>
+            parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable> //<Parcelable>
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         Log.e("MarkdownContentView", "write parcel: ${ids.size}.");
         parcel.writeIntArray(ids.toIntArray())
-        parcel.writeSparseArray(container as SparseArray<Any>)
+        parcel.writeSparseArray(container)
     }
 
     fun attachToParent(view: View, index: Int) {
