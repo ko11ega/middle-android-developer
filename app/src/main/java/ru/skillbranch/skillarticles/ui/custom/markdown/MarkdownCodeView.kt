@@ -1,4 +1,5 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -136,7 +137,7 @@ class MarkdownCodeView private constructor(
         isSingleLine = code.lines().size ==1
         tv_codeView.setText(codeString,TextView.BufferType.SPANNABLE)
         setPadding(padding)
-        background = GradientDrawable(). apply{
+        background = GradientDrawable().apply{
             shape = GradientDrawable.RECTANGLE
             cornerRadii = FloatArray(8).apply{ fill(radius, 0, size)}
             color = ColorStateList.valueOf(bgColor)
@@ -156,6 +157,7 @@ class MarkdownCodeView private constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+
         val usedHeight = paddingTop
         val bodyWidth = r - l - paddingLeft - paddingRight
         val left = paddingLeft
@@ -213,6 +215,7 @@ class MarkdownCodeView private constructor(
         isDark = !isDark
         applyColors()
     }
+
 
     private fun applyColors() {
         iv_switch.imageTintList = ColorStateList.valueOf(textColor)

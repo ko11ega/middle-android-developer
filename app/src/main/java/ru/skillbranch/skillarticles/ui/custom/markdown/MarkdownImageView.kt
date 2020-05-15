@@ -2,9 +2,7 @@ package ru.skillbranch.skillarticles.ui.custom.markdown
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
-import android.os.Parcel
-import android.os.Parcelable
+import android.graphics.* import android.os.Parcel import android.os.Parcelable
 import android.text.Spannable
 import android.view.*
 import android.widget.ImageView
@@ -77,7 +75,7 @@ class MarkdownImageView private constructor(
         strokeWidth = 0f
     }
 
-    private var isOpen = false
+    private var isOpen =  false
     private var aspectRatio = 0f
 
     init {
@@ -139,8 +137,18 @@ class MarkdownImageView private constructor(
             iv_image.setOnClickListener{
                 if(tv_alt?.isVisible ==true) animateHideAlt()
                 else animateShowAlt()
+                isOpen = !isOpen
             }
         }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) { //TODO !video
+        super.onSizeChanged(w, h, oldw, oldh)
+        Glide
+            .with(context)
+            .load(imageUrl)
+            .transform(AspectRatioResizeTransform())
+            .into(iv_image)
     }
 
 
@@ -153,7 +161,14 @@ class MarkdownImageView private constructor(
         //all children width == parent width (constraint parent width)
         val ms =MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
 
-        iv_image.measure(ms, heightMeasureSpec)
+        //TODO
+        if (aspectRatio != 0f) {
+            //restore width/height by aspectRatio
+            val hms = MeasureSpec.makeMeasureSpec(width/aspectRatio.toInt(), MeasureSpec.EXACTLY)
+            iv_image.measure(ms, hms)
+        } else iv_image.measure(ms, heightMeasureSpec)
+        //TODO iv_image.measure(ms, heightMeasureSpec)
+
         tv_title.measure(ms, heightMeasureSpec)
         tv_alt?.measure(ms, heightMeasureSpec)
 
@@ -208,6 +223,9 @@ class MarkdownImageView private constructor(
             linePaint
         )
 
+        val l = canvas.width - titlePadding.toFloat()
+        val r = canvas.width.toFloat()
+
         canvas.drawLine(
             canvas.width - titlePadding.toFloat(),
             linePositionY,
@@ -255,7 +273,7 @@ class MarkdownImageView private constructor(
         super.onRestoreInstanceState(state)
         if (state is SavedState) {
             isOpen = state.ssIsOpen
-            aspectRatio - state.ssAspectRatio
+            aspectRatio = state.ssAspectRatio
             tv_alt?.isVisible = isOpen
         }
     }
@@ -292,7 +310,7 @@ class MarkdownImageView private constructor(
 
 class AspectRatioResizeTransform : BitmapTransformation() {
     private val ID =
-        "ru.skillbranch.skillarticles.glide.AspectRatioResizeTransform" //any unique string
+        "ru.skillbranch.skillarticles.glide.AspectRatioResizeTransform"
     private val ID_BYTES = ID.toByteArray(Charset.forName("UTF-8"))
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
         messageDigest.update(ID_BYTES)
