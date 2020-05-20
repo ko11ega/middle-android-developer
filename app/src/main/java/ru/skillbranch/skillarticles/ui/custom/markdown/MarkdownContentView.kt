@@ -141,12 +141,15 @@ class MarkdownContentView @JvmOverloads constructor(
         children.forEachIndexed { index, view ->
             view as IMarkdownView
             //search for child with markdown element offset
+            Log.d("MarkdownContentView","renderSearchResult.result[index] ${result[index]}")
+            Log.d("MarkdownContentView","renderSearchResult.elements[index].offset ${elements[index].offset}")
             view.renderSearchResult(result[index], elements[index].offset)
         }
     }
 
     fun renderSearchPosition(
-        searchPosition: Pair<Int, Int>?
+        searchPosition: Pair<Int, Int>?,
+        force: Boolean = false
     ) {
         searchPosition ?: return
         val bounds = elements.map { it.bounds }
