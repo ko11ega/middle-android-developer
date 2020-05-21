@@ -1,15 +1,9 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
-import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
-import android.util.AttributeSet
-import android.util.Log
-import android.util.SparseArray
-import android.view.View
+
+import android.content.Context import android.os.Parcel import android.os.Parcelable
+import android.util.AttributeSet import android.util.Log import android.util.SparseArray import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.util.isEmpty
-import androidx.core.view.ViewCompat
+import android.widget.TextView import androidx.core.util.isEmpty import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
@@ -149,7 +143,7 @@ class MarkdownContentView @JvmOverloads constructor(
 
     fun renderSearchPosition(
         searchPosition: Pair<Int, Int>?,
-        force: Boolean = false
+        force: Boolean = false //TODO
     ) {
         searchPosition ?: return
         val bounds = elements.map { it.bounds }
@@ -177,6 +171,8 @@ class MarkdownContentView @JvmOverloads constructor(
         children.filterIsInstance<MarkdownCodeView>()
             .forEach { it.copyListener = listener }
     }
+
+    // то что ниже из разбора примера со * в видео 7 урока
 
     override fun onSaveInstanceState(): Parcelable? {
         val state = SavedState(super.onSaveInstanceState())

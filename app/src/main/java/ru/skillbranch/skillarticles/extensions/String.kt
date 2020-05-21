@@ -15,8 +15,8 @@ indexesOf
 fun String?.indexesOf(substr: String, ignoreCase: Boolean = true): List<Int> {
     var result : MutableList<Int> = mutableListOf()
     var matchIndex : Int = -1
-    if(this == null) return result
-    while(this.indexOf(substr, matchIndex, ignoreCase)>0) {
+    if(this == null || substr== "") return result
+    while(this.indexOf(substr, matchIndex, ignoreCase)>=0) {
         matchIndex = this.indexOf(substr, matchIndex+1, ignoreCase)
         if (matchIndex==-1) break
         result.add(matchIndex)
