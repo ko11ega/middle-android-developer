@@ -47,7 +47,7 @@ class IconLinkSpan(
         }
 
         canvas.save()
-        val trY = y-paint.descent()*3 //TODO убрал y+paint.descent()
+        val trY = y + paint.descent() - linkDrawable.bounds.bottom //TODO убрал y+paint.descent()
         canvas.translate(x + padding/2f, trY.toFloat())
         linkDrawable.draw(canvas)
         canvas.restore()
