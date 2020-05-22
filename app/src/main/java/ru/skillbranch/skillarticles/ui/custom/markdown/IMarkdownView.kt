@@ -1,5 +1,6 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
 
+import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import androidx.core.text.getSpans
@@ -18,7 +19,8 @@ interface IMarkdownView {
         val offsetResult = results
             .map {(start, end) -> start.minus(offset) to end.minus(offset)}
 
-        offsetResult.forEach{(start, end) ->
+        try{
+            offsetResult.forEach{(start, end) ->
                 spannableContent.setSpan(
                     SearchSpan(),
                     start,
@@ -26,6 +28,8 @@ interface IMarkdownView {
                     SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
+        } catch (e: Exception) {
+        }
     }
 
     fun renderSearchPosition(

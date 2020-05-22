@@ -8,8 +8,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.Px
-import androidx.annotation.VisibleForTesting
+import androidx.annotation.Px import androidx.annotation.VisibleForTesting
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
@@ -25,6 +24,7 @@ import ru.skillbranch.skillarticles.extensions.setPaddingOptionally
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import kotlin.math.hypot
+
 
 @SuppressLint("ViewConstructor")
 class MarkdownImageView private constructor(
@@ -75,8 +75,8 @@ class MarkdownImageView private constructor(
         strokeWidth = 0f
     }
 
-    private var isOpen =  false
-    private var aspectRatio = 0f
+    private var isOpen =  false //TODO video
+    private var aspectRatio = 0f //TODO video
 
     init {
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -137,11 +137,12 @@ class MarkdownImageView private constructor(
             iv_image.setOnClickListener{
                 if(tv_alt?.isVisible ==true) animateHideAlt()
                 else animateShowAlt()
-                isOpen = !isOpen
+                isOpen = !isOpen //TODO video
             }
         }
     }
 
+    //TODO video 7
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) { //TODO !video
         super.onSizeChanged(w, h, oldw, oldh)
         Glide
@@ -223,8 +224,8 @@ class MarkdownImageView private constructor(
             linePaint
         )
 
-        val l = canvas.width - titlePadding.toFloat()
-        val r = canvas.width.toFloat()
+        val l = canvas.width - titlePadding.toFloat() //TODO ??
+        val r = canvas.width.toFloat() //TODO ??
 
         canvas.drawLine(
             canvas.width - titlePadding.toFloat(),

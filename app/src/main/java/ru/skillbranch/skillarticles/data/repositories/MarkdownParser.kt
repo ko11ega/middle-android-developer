@@ -140,13 +140,13 @@ object MarkdownParser {
                 3 -> {
                     //text without "> "
                     text = string.subSequence(startIndex.plus(2), endIndex)
-                    val subelementss =
+                    val subelements =
                         findElements(
                             text
                         )
                     val element = Element.Quote(
                             text,
-                            subelementss
+                            subelements
                         )
                     parents.add(element)
                     lastStartIndex = endIndex
@@ -156,13 +156,13 @@ object MarkdownParser {
                 4 -> {
                     //text without "*{}*"
                     text = string.subSequence(startIndex.inc(), endIndex.dec())
-                    val subelementss =
+                    val subelements =
                         findElements(
                             text
                         )
                     val element = Element.Italic(
                             text,
-                            subelementss
+                            subelements
                         )
                     parents.add(element)
                     lastStartIndex = endIndex
@@ -187,7 +187,7 @@ object MarkdownParser {
                 //STRIKE
                 6 -> {
                     //text without "~~{}~~"
-                    text = string.subSequence(startIndex.inc().inc(), endIndex.dec().dec())
+                    text = string.subSequence(startIndex.plus(2), endIndex.plus(-2))
                     //find inner elements
                     val subelements = findElements(
                             text

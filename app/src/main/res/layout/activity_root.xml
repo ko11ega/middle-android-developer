@@ -36,7 +36,8 @@
             android:padding="16dp"
             android:focusable="true"
             android:clipToPadding="false"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true"
+            />
     </androidx.core.widget.NestedScrollView>
 
     <ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu

@@ -5,7 +5,6 @@ import android.text.Layout
 /*
 Get the line height of a line.
  */
-
 fun Layout.getLineHeight(line: Int): Int {
     return getLineTop(line.inc()) - getLineTop(line)
 }
