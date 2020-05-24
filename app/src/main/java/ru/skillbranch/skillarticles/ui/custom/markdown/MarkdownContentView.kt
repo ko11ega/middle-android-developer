@@ -142,8 +142,7 @@ class MarkdownContentView @JvmOverloads constructor(
     }
 
     fun renderSearchPosition(
-        searchPosition: Pair<Int, Int>?,
-        force: Boolean = false //TODO
+        searchPosition: Pair<Int, Int>?//,force: Boolean = false //TODO ??
     ) {
         searchPosition ?: return
         val bounds = elements.map { it.bounds }
@@ -184,15 +183,17 @@ class MarkdownContentView @JvmOverloads constructor(
         super.onRestoreInstanceState(state)
         if (state is SavedState) layoutManager = state.layout
 
-        //TODO temp solution, remove this is fragment
+        //TODO temp solution, remove this in fragment
         children.filter { it !is MarkdownTextView }
             .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>?) {
-        //TODO temp solution, remove this is fragment
+        /*//TODO temp solution, remove this in fragment
         children.filter { it !is MarkdownTextView }
             .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
+
+         */
         //save children manually without markdown text view
         children.filter { it !is MarkdownTextView }
             .forEach { it.saveHierarchyState(layoutManager.container) }
@@ -205,7 +206,7 @@ class MarkdownContentView @JvmOverloads constructor(
         var container: SparseArray<Parcelable> = SparseArray()
 
         constructor(parcel: Parcel) : this() {
-            ids =  parcel.createIntArray()!!.toMutableList()//TODO parcel.readArrayList(Int::class.java.classLoader) as ArrayList<Int> //Log.e("MarkdownContentView", "parcel: $ids.");
+            ids =  parcel.readArrayList(Int::class.java.classLoader) as ArrayList<Int> //parcel.createIntArray()!!.toMutableList()//TODO //Log.e("MarkdownContentView", "parcel: $ids.");
             container =
                 parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable>
         }
