@@ -192,7 +192,6 @@ class MarkdownContentView @JvmOverloads constructor(
         /*//TODO temp solution, remove this in fragment
         children.filter { it !is MarkdownTextView }
             .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
-
          */
         //save children manually without markdown text view
         children.filter { it !is MarkdownTextView }
