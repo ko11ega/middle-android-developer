@@ -2,13 +2,17 @@ package ru.skillbranch.skillarticles.ui.custom.markdown
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.* import android.os.Parcel import android.os.Parcelable
+import android.graphics.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.Spannable
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.Px import androidx.annotation.VisibleForTesting
+import androidx.annotation.Px
+import androidx.annotation.VisibleForTesting
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
@@ -75,8 +79,8 @@ class MarkdownImageView private constructor(
         strokeWidth = 0f
     }
 
-    private var isOpen =  false //TODO video
-    private var aspectRatio = 0f //TODO video
+    private var isOpen =  false
+    private var aspectRatio = 0f
 
     init {
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -116,11 +120,6 @@ class MarkdownImageView private constructor(
 
         tv_title.setText(title, TextView.BufferType.SPANNABLE)
 
-        Glide
-            .with(context)
-            .load(url)
-            .transform(AspectRatioResizeTransform())
-            .into(iv_image)
 
         if(alt!=null){
             tv_alt = TextView(context).apply {
@@ -137,13 +136,12 @@ class MarkdownImageView private constructor(
             iv_image.setOnClickListener{
                 if(tv_alt?.isVisible ==true) animateHideAlt()
                 else animateShowAlt()
-                isOpen = !isOpen //TODO video
+                isOpen = !isOpen
             }
         }
     }
 
-    //TODO video 7
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) { //TODO !video
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         Glide
             .with(context)
@@ -162,13 +160,12 @@ class MarkdownImageView private constructor(
         //all children width == parent width (constraint parent width)
         val ms =MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
 
-        //TODO
         if (aspectRatio != 0f) {
             //restore width/height by aspectRatio
-            val hms = MeasureSpec.makeMeasureSpec(width/aspectRatio.toInt(), MeasureSpec.EXACTLY)
+            val hms =
+                MeasureSpec.makeMeasureSpec(width/aspectRatio.toInt(), MeasureSpec.EXACTLY)
             iv_image.measure(ms, hms)
         } else iv_image.measure(ms, heightMeasureSpec)
-        //TODO iv_image.measure(ms, heightMeasureSpec)
 
         tv_title.measure(ms, heightMeasureSpec)
         tv_alt?.measure(ms, heightMeasureSpec)
@@ -224,9 +221,8 @@ class MarkdownImageView private constructor(
             linePaint
         )
 
-        val l = canvas.width - titlePadding.toFloat() //TODO ??
-        val r = canvas.width.toFloat() //TODO ??
-
+        val l = canvas.width - titlePadding.toFloat()
+        val r = canvas.width.toFloat()
         canvas.drawLine(
             canvas.width - titlePadding.toFloat(),
             linePositionY,
@@ -234,6 +230,7 @@ class MarkdownImageView private constructor(
             linePositionY,
             linePaint
         )
+        Log.e("MarkdownImageView", "dr: ")
     }
 
     private fun animateShowAlt() {

@@ -1,9 +1,15 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
-
-import android.content.Context import android.os.Parcel import android.os.Parcelable
-import android.util.AttributeSet import android.util.Log import android.util.SparseArray import android.view.View
+import android.util.Log
+import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.AttributeSet
+import android.util.SparseArray
+import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView import androidx.core.util.isEmpty import androidx.core.view.ViewCompat
+import android.widget.TextView
+import androidx.core.util.isEmpty
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
@@ -71,7 +77,7 @@ class MarkdownContentView @JvmOverloads constructor(
 
     fun setContent(content: List<MarkdownElement>) {
         elements = content
-        var index = 0 //TODO
+        var index = 0
         content.forEach {
             when (it) {
                 is MarkdownElement.Text -> {
@@ -102,8 +108,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.image.alt
                     )
                     addView(iv)
-                    layoutManager.attachToParent(iv, index) //TODO
-                    index++ //TODO
+                    layoutManager.attachToParent(iv, index)
+                    index++
                 }
 
                 is MarkdownElement.Scroll -> {
@@ -113,8 +119,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.blockCode.text
                     )
                     addView(sv)
-                    layoutManager.attachToParent(sv, index) //TODO
-                    index++ //TODO
+                    layoutManager.attachToParent(sv, index)
+                    index++
                 }
             }
         }
@@ -135,9 +141,7 @@ class MarkdownContentView @JvmOverloads constructor(
         children.forEachIndexed { index, view ->
             view as IMarkdownView
             //search for child with markdown element offset
-            Log.d("MarkdownContentView","renderSearchResult.result[index] ${result[index]}")
-            Log.d("MarkdownContentView","renderSearchResult.elements[index].offset ${elements[index].offset}")
-            view.renderSearchResult(result[index], elements[index].offset)
+           view.renderSearchResult(result[index], elements[index].offset)
         }
     }
 
@@ -171,8 +175,6 @@ class MarkdownContentView @JvmOverloads constructor(
             .forEach { it.copyListener = listener }
     }
 
-    // то что ниже из разбора примера со * в видео 7 урока
-
     override fun onSaveInstanceState(): Parcelable? {
         val state = SavedState(super.onSaveInstanceState())
         state.layout = layoutManager
@@ -182,17 +184,9 @@ class MarkdownContentView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable?) {
         super.onRestoreInstanceState(state)
         if (state is SavedState) layoutManager = state.layout
-
-        //TODO temp solution, remove this in fragment
-        children.filter { it !is MarkdownTextView }
-            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>?) {
-        /*//TODO temp solution, remove this in fragment
-        children.filter { it !is MarkdownTextView }
-            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
-         */
         //save children manually without markdown text view
         children.filter { it !is MarkdownTextView }
             .forEach { it.saveHierarchyState(layoutManager.container) }
