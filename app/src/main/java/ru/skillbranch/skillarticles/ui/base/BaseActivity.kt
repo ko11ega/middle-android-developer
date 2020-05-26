@@ -34,7 +34,6 @@ abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatA
     val toolbarBuilder = ToolbarBuilder()
     val bottombarBuilder = BottombarBuilder()
 
-    //set listeners, tuning views
     abstract fun subscribeOnState(state: IViewModelState)
 
     abstract fun renderNotification(notify: Notify)
