@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class ContainerBehavior() : AppBarLayout.ScrollingViewBehavior() {
     constructor(context: Context, atributeSet: AttributeSet) : this()
 
-    override fun onMesureChild(
+    override fun onMeasureChild(
         parent: CoordinatorLayout,
         child: View,
         parentWidthMeasureSpec: Int,

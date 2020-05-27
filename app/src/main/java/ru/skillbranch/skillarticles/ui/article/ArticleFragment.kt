@@ -29,6 +29,7 @@ import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.format
 import ru.skillbranch.skillarticles.extensions.hideKeyboard
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
+import ru.skillbranch.skillarticles.ui.IArticleView
 import ru.skillbranch.skillarticles.ui.base.*
 import ru.skillbranch.skillarticles.ui.delegates.RenderProp
 import ru.skillbranch.skillarticles.viewmodels.ArticleState
@@ -74,7 +75,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHaspOptionsMenu(true)
+        setHasOptionsMenu(true)
     }
 
     override fun setupViews() {
@@ -201,14 +202,14 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
        tv_text_content.setCopyListener { copy ->
            val clipboard =
                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-           val clip = ClipData.NewPlainText("Copied code", copy)
+           val clip = ClipData.newPlainText("Copied code", copy)
            clipboard.setPrimaryClip(clip)
            viewModel.handleCopyCode()
        }
    }
 
     inner class ArticleBinding : Binding() {
-        var isFocuseddSearch: Boolean = false
+        var isFocusedSearch: Boolean = false
         var searchQuery: String? = null
 
         private var isLoadingCOntent by RenderProp(true)
@@ -307,7 +308,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
         }
 
         override fun restoreUi(savedState: Bundle?) {
-            isFocuseddSearch = savedState?.getBoolean(::isFocusedSearch.name) ?: false
+            isFocusedSearch = savedState?.getBoolean(::isFocusedSearch.name) ?: false
         }
     }
 

@@ -18,7 +18,7 @@ import ru.skillbranch.skillarticles.viewmodels.base.Notify
 class RootActivity : BaseActivity<RootViewModel>() {
 
     override val layout: Int = R.layout.activity_root
-    publiv override val viewModel: RootViewModels by viewModels()
+    public override val viewModel: RootViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

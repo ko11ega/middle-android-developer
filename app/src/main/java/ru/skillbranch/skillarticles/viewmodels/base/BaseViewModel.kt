@@ -95,8 +95,8 @@ abstract class BaseViewModel<T : IViewModelState>(
         }
     }
 
-    fun saveState(outState: Bundle){
-        currentState.save(outState)
+    fun saveState(){
+        currentState.save(handleState)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -168,7 +168,7 @@ sealed class NavigationCommand() {
     ): NavigationCommand()
 
     data class FinishLogin(
-        val privateDestinatioon: Int? = null
+        val privateDestination: Int? = null
     ): NavigationCommand()
 }
 

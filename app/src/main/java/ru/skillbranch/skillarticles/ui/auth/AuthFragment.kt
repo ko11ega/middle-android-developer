@@ -13,7 +13,7 @@ import ru.skillbranch.skillarticles.viewmodels.auth.AuthViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.NavigationCommand
 
 class AuthFragment : BaseFragment<AuthViewModel>() {
-    override val viewModel: IAuthViewModel by viewModels()
+    override val viewModel: AuthViewModel by viewModels()
     override val layout: Int = R.layout.fragment_auth
     private val args: AuthFragmentArgs by navArgs()
 
