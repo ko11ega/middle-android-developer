@@ -1,4 +1,4 @@
-package ru.skillbranch.skillarticles.viewmodels
+package ru.skillbranch.skillarticles.viewmodels.article
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -161,15 +161,15 @@ class ArticleViewModel(
         updateState { it.copy(searchQuery = query, searchResults = result!!, searchPosition = 0 )}
     }
 
-    fun handleUpResult() {
+    override fun handleUpResult() {
         updateState { it.copy(searchPosition = it.searchPosition.dec()) }
     }
 
-    fun handleDownResult() {
+    override fun handleDownResult() {
         updateState { it.copy(searchPosition = it.searchPosition.inc()) }
     }
 
-    fun handleCopyCode() {
+    override fun handleCopyCode() {
         notify(Notify.TextMessage("Code copy to clipboard"))
     }
 

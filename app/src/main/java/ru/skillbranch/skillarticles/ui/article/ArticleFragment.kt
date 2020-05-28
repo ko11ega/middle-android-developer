@@ -29,15 +29,15 @@ import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.format
 import ru.skillbranch.skillarticles.extensions.hideKeyboard
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
-import ru.skillbranch.skillarticles.ui.IArticleView
 import ru.skillbranch.skillarticles.ui.base.*
 import ru.skillbranch.skillarticles.ui.delegates.RenderProp
-import ru.skillbranch.skillarticles.viewmodels.ArticleState
-import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
+import ru.skillbranch.skillarticles.viewmodels.article.ArticleState
+import ru.skillbranch.skillarticles.viewmodels.article.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.ViewModelFactory
 
-class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
+class ArticleFragment : BaseFragment<ArticleViewModel>(),
+    IArticleView {
     private val args: ArticleFragmentArgs by navArgs()
     override val viewModel: ArticleViewModel by viewModels {
         ViewModelFactory(
@@ -100,8 +100,8 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
             .transform(CenterCrop(), RoundedCorners(cornerRadius))
             .into(iv_poster)
 
-        tv_title.text = args.tv_title
-        tv_author.text = args.tv_author
+        tv_title.text = args.title //TODO .tv_title
+        tv_author.text = args.author //TODO .tv_author
         tv_date.text = args.date.format()
 
         et_comment.setOnEditorActionListener { view, _, _ ->
@@ -257,10 +257,10 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
             }
         }
 
-        private var searchResults: List<Pair<Int, Int>> by RenderProp(emptyList())
+        private var searchResults: List<Pair<Int, Int>> by RenderProp(emptyList<Pair<Int, Int>>())//TODO + <Pair<Int, Int>>
         private var searchPosition: Int by RenderProp(0)
 
-        private var content: List<MarkdownElement> by RenderProp(emptyList()) {
+        private var content: List<MarkdownElement> by RenderProp(emptyList<MarkdownElement>()) { //TODO + <MarkdownElement>
             //   tv_text_content.isLoading = it. isEmpty()
             tv_text_content.setContent(it)
             if (it.isNotEmpty()) setupCopyListener()

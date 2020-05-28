@@ -10,7 +10,7 @@ import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.ArticleItemData
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.delegates.RenderProp
-import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
+import ru.skillbranch.skillarticles.viewmodels.article.ArticleViewModel
 import ru.skillbranch.skillarticles.viewmodels.articles.ArticlesState
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
 import ru.skillbranch.skillarticles.viewmodels.base.NavigationCommand
@@ -28,9 +28,9 @@ class ArticlesFragment : BaseFragment<ArticleViewModel>(){
             item.authorAvatar,
             item.category,
             item.categoryIcon,
-            item.date,
             item.poster,
-            item.title
+            item.title,
+            item.date
         )
 
         viewModel.navigate(NavigationCommand.To(action.actionId, action.arguments))
@@ -45,7 +45,7 @@ class ArticlesFragment : BaseFragment<ArticleViewModel>(){
     }
 
     inner class ArticlesBinding : Binding() {
-        private var articles: List<ArticleItemData> by RenderProp(emptyList()) {
+        private var articles: List<ArticleItemData> by RenderProp(emptyList<ArticleItemData>()) {//TODO + <ArticleItemData>
             articlesAdapter.submitList(it)
         }
 
