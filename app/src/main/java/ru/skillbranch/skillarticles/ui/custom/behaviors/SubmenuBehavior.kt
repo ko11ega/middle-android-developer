@@ -8,6 +8,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.marginRight
+import ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -24,9 +25,13 @@ ArticleMenu если открыто должено скрываться из о�
 для кнопки открытия меню в Bottombar android:id="@+id/btn_settings")
  */
 
-
-class SubmenuBehavior<V : View>(context: Context, attrs: AttributeSet) :
+/*
+class SubmenuBehavior<V : View>(context: Context, attrs: AttributeSet?) : //TODO AttributeSet?
     CoordinatorLayout.Behavior<V>(context, attrs) {
+*/
+class SubmenuBehavior<V : View>() : CoordinatorLayout.Behavior<V>() { //TODO
+
+    constructor(context: Context, attrs: AttributeSet): this()    // TODO
 
     override fun onStartNestedScroll(
         coordinatorLayout: CoordinatorLayout, child: V, directTargetChild: View, target: View, axes: Int, type: Int
