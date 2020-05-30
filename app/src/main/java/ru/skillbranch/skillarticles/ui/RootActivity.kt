@@ -16,10 +16,9 @@ import ru.skillbranch.skillarticles.viewmodels.base.NavigationCommand
 import ru.skillbranch.skillarticles.viewmodels.base.Notify
 
 class RootActivity : BaseActivity<RootViewModel>() {
-
     override val layout: Int = R.layout.activity_root
     public override val viewModel: RootViewModel by viewModels()
-
+    override fun subscribeOnState(state: IViewModelState){} // TODO добавил
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //top level destination

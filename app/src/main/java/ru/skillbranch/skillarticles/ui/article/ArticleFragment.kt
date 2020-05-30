@@ -212,8 +212,8 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
         var isFocusedSearch: Boolean = false
         var searchQuery: String? = null
 
-        private var isLoadingCOntent by RenderProp(true)
-
+        private var isLoadingContent by RenderProp(true)
+        private var isSearchResults by RenderProp(false) //TODO
         private var isLike: Boolean by RenderProp(false) {bottombar.btn_like.isChecked =it}
         private var isBookmark: Boolean by RenderProp(false) {
             bottombar.btn_bookmark.isChecked =it
@@ -296,7 +296,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
             isDarkMode = data.isDarkMode
             content = data.content
 
-            isLoadingCOntent = data.isLoadingContent
+            isLoadingContent = data.isLoadingContent
             isSearch = data.isSearch
             searchQuery = data.searchQuery
             searchPosition = data.searchPosition
