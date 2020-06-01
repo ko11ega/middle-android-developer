@@ -137,7 +137,7 @@ class EventObserver<E>(private val onEventUnhandledContent: (E) -> Unit) : Obser
     }
 }
 
-sealed class Notify() {
+sealed class Notify { // TODO remove default constructor Notify()
     abstract val message: String
 
     data class TextMessage(override val message: String) : Notify()
@@ -155,7 +155,7 @@ sealed class Notify() {
     ) : Notify()
 }
 
-sealed class NavigationCommand() {
+sealed class NavigationCommand { // TODO remove default constructor NavigationCommand()
     data class To(
         val destination: Int,
         val args: Bundle? = null,

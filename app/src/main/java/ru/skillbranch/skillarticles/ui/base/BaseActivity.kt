@@ -89,7 +89,7 @@ abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatA
     }
 }
 
-class ToolbarBuilder() {
+class ToolbarBuilder { //TODO remove empty default constructor ToolbarBuilder()
     var title: String? = null
     var subtitle: String? = null
     var logo: String? = null

@@ -237,8 +237,8 @@ class MarkdownCodeView private constructor(
         if (state is SavedState) {
             isManual = state.ssIsManual
             isDark = state.ssIsDark
-            applyColors()
         }
+        applyColors()
     }
 
     private class SavedState : BaseSavedState, Parcelable {

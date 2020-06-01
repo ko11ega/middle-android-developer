@@ -28,9 +28,7 @@ abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment()
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(layout, container, false) //TODO
-    }
+    ): View? = inflater.inflate(layout, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

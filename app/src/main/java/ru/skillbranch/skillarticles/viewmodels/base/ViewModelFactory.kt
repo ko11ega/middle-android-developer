@@ -1,4 +1,4 @@
-@file:Suppress("UNCHECKED_CAST")
+//@file:Suppress("UNCHECKED_CAST")
 
 package ru.skillbranch.skillarticles.viewmodels.base
 
@@ -17,7 +17,7 @@ class ViewModelFactory(
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
 
-    override fun <T : ViewModel> create(
+    override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle

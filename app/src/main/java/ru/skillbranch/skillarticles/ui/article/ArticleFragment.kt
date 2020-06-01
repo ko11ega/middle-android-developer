@@ -123,7 +123,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
 
     override fun hideSearchBar() {
         bottombar.setSearchState(false)
-        scroll.setMarginOptionally(bottom = 0)
+        scroll.setMarginOptionally(bottom = root.dpToIntPx(0)) // TODO
     }
 
 
@@ -144,12 +144,12 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
 
         menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                viewModel.handleSearchMode(true)
+                viewModel.handleSearchMode(false) //TODO true  -> false
                 return true
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                viewModel.handleSearchMode(false)
+                viewModel.handleSearchMode(true) //TODO false -> true
                 return true
             }
 
@@ -213,7 +213,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
         var searchQuery: String? = null
 
         private var isLoadingContent by RenderProp(true)
-        private var isSearchResults by RenderProp(false) //TODO
+
         private var isLike: Boolean by RenderProp(false) {bottombar.btn_like.isChecked =it}
         private var isBookmark: Boolean by RenderProp(false) {
             bottombar.btn_bookmark.isChecked =it
@@ -271,14 +271,14 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(),
             dependsOn<Boolean, Boolean, List<Pair<Int, Int>>, Int>(
                 ::isLoadingContent,
                 ::isSearch,
-                ::isSearchResults,
+                ::searchResults,
                 ::searchPosition
             ) {ilc, iss, sr, sp ->
                 if (!ilc && iss) {
                     tv_text_content.renderSearchResult(sr)
                     tv_text_content.renderSearchPosition(sr.getOrNull(sp))
                 }
-                if (!ilc && iss) {
+                if (!ilc && !iss) {
                     tv_text_content.clearSearchResult()
                 }
 

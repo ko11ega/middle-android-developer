@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Skill Articles</string>
     <string name="menu_title_search">Поиск</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="loading_with_dots">Loading...</string>
+    <string name="menu_search_title">Search</string>
     <string name="article_search_placeholder">Search</string>
     <string name="title_articles">Articles</string>
     <string name="title_bookmarks">Bookmarks</string>
