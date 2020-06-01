@@ -18,19 +18,21 @@ selectDestination
 Если destination является потомком destination top уровня
 (@+id/nav_articles, @+id/nav_profile, @+id/nav_bookmarks, @+id/nav_transcriptions)
 то соответствующий пункт меню в BottomNavigationView должен быть в состоянии selected
-*/
+ */
 
-fun BottomNavigationView.selectDestination(destination: NavDestination){ //TODO
-    if (destination.parent!=null){
-        if (destination.parent!!.parent == null){ // dest потомка top уровня
+fun BottomNavigationView.selectDestination(destination: NavDestination) { //TODO
 
-            this.menu.forEach { item -> item.isChecked = false }
-            println("this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
-            this.menu.findItem(destination.id).isChecked = true
-            println("this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
-            println("selectDestination: ${destination}")
-        }
+    val topDestinationsLabeles = setOf("Articles", "Profile", "Bookmarks", "Transcriptions")
+
+    if (destination.label in topDestinationsLabeles) { // dest потомка top уровня
+
+        this.menu.forEach { item -> item.isChecked = false }
+        println("this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
+        this.menu.findItem(destination.id).isChecked = true
+        println("this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
+        println("selectDestination: ${destination}")
     }
+
 }
 
 
@@ -44,18 +46,18 @@ View.setMarginOptionally(left:Int = marginLeft, top : Int = marginTop, right : I
 */
 
 fun View.setMarginOptionally(
-    left:Int = marginLeft,
-    top : Int = marginTop,
-    right : Int = marginRight,
-    bottom : Int = marginBottom)
-{
-    if(
-        (left != marginLeft)||
-        (top != marginTop)||
-        (right != marginRight)||
+    left: Int = marginLeft,
+    top: Int = marginTop,
+    right: Int = marginRight,
+    bottom: Int = marginBottom
+) {
+    if (
+        (left != marginLeft) ||
+        (top != marginTop) ||
+        (right != marginRight) ||
         (bottom != marginBottom)
     ) {
-        (layoutParams as? ViewGroup.MarginLayoutParams)?.run{
+        (layoutParams as? ViewGroup.MarginLayoutParams)?.run {
             leftMargin = left
             rightMargin = right
             topMargin = top
