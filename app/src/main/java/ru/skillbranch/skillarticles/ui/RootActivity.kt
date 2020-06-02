@@ -2,6 +2,8 @@ package ru.skillbranch.skillarticles.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +20,15 @@ import ru.skillbranch.skillarticles.viewmodels.base.Notify
 class RootActivity : BaseActivity<RootViewModel>() {
     override val layout: Int = R.layout.activity_root
     public override val viewModel: RootViewModel by viewModels()
-    override fun subscribeOnState(state: IViewModelState){} // TODO добавил
+    override fun subscribeOnState(state: IViewModelState){
+        println("state: $state")
+    } // TODO добавил
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.nav_host_fragment).navigateUp()
+        //return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //top level destination
@@ -40,6 +50,12 @@ class RootActivity : BaseActivity<RootViewModel>() {
 
         navController.addOnDestinationChangedListener{ controller, destination, arguments ->
             //if destination change set select bottom navigation item
+            //TODO if (destination.label == "Authorization" && уже прошли авторизацию) {destination = "Login"}
+            // грязный хак ((
+            println("currentState ${(viewModel as RootViewModel).currentState}")
+            if(destination.label == "Authorization" && viewModel.currentState.isAuth  == true ){
+                viewModel.navigate(NavigationCommand.To(R.id.nav_profile))
+            }
             nav_view.selectDestination(destination)
         }
     }

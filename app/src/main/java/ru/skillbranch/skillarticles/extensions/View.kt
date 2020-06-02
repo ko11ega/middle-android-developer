@@ -31,6 +31,9 @@ fun BottomNavigationView.selectDestination(destination: NavDestination) { //TODO
         this.menu.findItem(destination.id).isChecked = true
         println("this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
         println("selectDestination: ${destination}")
+    } else {
+        //println("ELSE this.menu: ${this.menu.findItem(destination.id)} ${this.menu.findItem(destination.id).isChecked}")
+        println("ELSE selectDestination: ${destination}")
     }
 
 }
