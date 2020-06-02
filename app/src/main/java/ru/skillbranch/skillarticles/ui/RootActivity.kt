@@ -54,8 +54,13 @@ class RootActivity : BaseActivity<RootViewModel>() {
             // грязный хак ((
             println("currentState ${(viewModel as RootViewModel).currentState}")
             if(destination.label == "Authorization" && viewModel.currentState.isAuth  == true ){
+                //controller.getBackStackEntry()
+                //controller.navigateUp()
+                //controller.
+                controller.popBackStack() //удаление верхнего фрагмента из backstack
                 viewModel.navigate(NavigationCommand.To(R.id.nav_profile))
-            }
+
+            } else
             nav_view.selectDestination(destination)
         }
     }
