@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_root.*
 import kotlinx.android.synthetic.main.layout_bottombar.*
 import ru.skillbranch.skillarticles.R
+import ru.skillbranch.skillarticles.data.repositories.RootRepository.isAuth
 import ru.skillbranch.skillarticles.extensions.selectDestination //TODO Необходимо реализовать
 import ru.skillbranch.skillarticles.ui.base.BaseActivity
 import ru.skillbranch.skillarticles.viewmodels.RootViewModel
@@ -50,6 +51,17 @@ class RootActivity : BaseActivity<RootViewModel>() {
 
         navController.addOnDestinationChangedListener{ controller, destination, arguments ->
             //if destination change set select bottom navigation item
+            nav_view.selectDestination(destination)
+
+            //if(destination.id == R.id.nav_auth) nav_view.selectItem(arguments?.get("private_destination") as Int?)
+
+            if(viewModel.currentState.isAuth && destination.id == R.id.nav_auth) {
+                controller.popBackStack()
+                val private: Int? = arguments?.get("private_destination") as Int?
+                if(private != null) controller.navigate(private)
+            }
+
+            /*
             //TODO if (destination.label == "Authorization" && уже прошли авторизацию) {destination = "Login"}
             // грязный хак ((
             println("currentState ${(viewModel as RootViewModel).currentState}")
@@ -60,8 +72,8 @@ class RootActivity : BaseActivity<RootViewModel>() {
                 controller.popBackStack() //удаление верхнего фрагмента из backstack
                 viewModel.navigate(NavigationCommand.To(R.id.nav_profile))
 
-            } else
-            nav_view.selectDestination(destination)
+            }*/
+
         }
     }
 

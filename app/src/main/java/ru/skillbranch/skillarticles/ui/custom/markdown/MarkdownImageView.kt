@@ -163,7 +163,7 @@ class MarkdownImageView private constructor(
         if (aspectRatio != 0f) {
             //restore width/height by aspectRatio
             val hms =
-                MeasureSpec.makeMeasureSpec(width/aspectRatio.toInt(), MeasureSpec.EXACTLY)
+                MeasureSpec.makeMeasureSpec((width/aspectRatio).toInt(), MeasureSpec.EXACTLY)
             iv_image.measure(ms, hms)
         } else iv_image.measure(ms, heightMeasureSpec)
 
@@ -278,7 +278,7 @@ class MarkdownImageView private constructor(
 
     private class SavedState : BaseSavedState, Parcelable {
         var ssIsOpen: Boolean = false
-        var ssAspectRatio: Float = 0f
+        var ssAspectRatio: Float = 0F
 
         constructor(superState: Parcelable?) : super(superState)
 

@@ -76,6 +76,8 @@ abstract class BaseActivity<T : BaseViewModel<out IViewModelState>> : AppCompatA
             }
 
             is NavigationCommand.FinishLogin -> {
+                // TODO fragmentManager.replace( страницы с авторизацией)
+                //navController.
                 navController.navigate(R.id.finish_login)
                 if(command.privateDestination!=null) navController.navigate(command.privateDestination)
             }
