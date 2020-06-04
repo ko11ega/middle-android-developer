@@ -55,5 +55,4 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel>(){
         }
 
     }
-
 }
