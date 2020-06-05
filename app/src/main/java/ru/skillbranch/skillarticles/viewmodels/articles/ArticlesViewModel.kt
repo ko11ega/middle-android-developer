@@ -1,7 +1,8 @@
 package ru.skillbranch.skillarticles.viewmodels.articles
 
 import androidx.lifecycle.SavedStateHandle
-import ru.skillbranch.skillarticles.data.ArticleItemData
+//import ru.skillbranch.skillarticles.data.ArticleItemData
+import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.data.repositories.ArticlesRepository
 import ru.skillbranch.skillarticles.viewmodels.base.BaseViewModel
 import ru.skillbranch.skillarticles.viewmodels.base.IViewModelState
