@@ -13,7 +13,7 @@ class ArticlesAdapter(private val listener: (ArticleItemData)-> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleVH {
         val view = ArticleItemView(parent.context)
-        return ArticleVH(containerView)
+        return ArticleVH(view)
     }
 
     override fun onBindViewHolder(holder: ArticleVH, position: Int) {

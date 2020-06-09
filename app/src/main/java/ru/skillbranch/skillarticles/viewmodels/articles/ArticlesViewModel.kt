@@ -29,7 +29,7 @@ class ArticlesViewModel(handle: SavedStateHandle) :
     }
     private val listData = Transformations.switchMap(state) {
         when {
-            it.isSearch && !it.searchQuery.isNullOrBlank() -> buildPagesList(
+            it.isSearch && !it.searchQuery.isNullOrBlank() -> buildPagedList(
                 repository.searchArticles(
                     it.searchQuery
                 )
@@ -56,7 +56,7 @@ class ArticlesViewModel(handle: SavedStateHandle) :
         )
 
         //if all articles
-        if (dataFactory.startegy is ArticleStrategy.AllArticles) {
+        if (dataFactory.strategy is ArticleStrategy.AllArticles) {
             builder.setBoundaryCallback(
                 ArticlesBoundaryCallback(
                     ::zeroLoadingHandle,

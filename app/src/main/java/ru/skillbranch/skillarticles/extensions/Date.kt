@@ -15,6 +15,11 @@ fun Date.format(pattern : String="HH:mm:ss dd.MM.yy"):String{
     return dateFormat.format(this)
 }
 
+fun Date.shortFormat(pattern : String="dd.MM.yy"):String{
+    val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+    return dateFormat.format(this)
+}
+
 fun Date.add(value: Int, units: TimeUnits=TimeUnits.SECOND):Date{
     var time = this.time
     time+=when(units){
