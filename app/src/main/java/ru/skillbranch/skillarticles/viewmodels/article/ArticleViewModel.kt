@@ -12,6 +12,7 @@ import ru.skillbranch.skillarticles.data.models.ArticleData
 import ru.skillbranch.skillarticles.data.models.ArticlePersonalInfo
 import ru.skillbranch.skillarticles.data.models.CommentItemData
 import ru.skillbranch.skillarticles.data.repositories.ArticleRepository
+import ru.skillbranch.skillarticles.data.repositories.CommentsDataFactory
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.data.toAppSettings
 import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
@@ -186,7 +187,7 @@ class ArticleViewModel(
         notify(Notify.TextMessage("Code copy to clipboard"))
     }
 
-    override fun handleSendComment() {
+    override fun handleSendComment(comment: String) {
         if (!currentState.isAuth) navigate(NavigationCommand.StartLogin())
         else {
             viewModelScope.launch {
