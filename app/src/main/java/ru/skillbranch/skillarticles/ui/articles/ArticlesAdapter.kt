@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ru.skillbranch.skillarticles.data.LocalDataHolder.localArticleItems
+import ru.skillbranch.skillarticles.data.NetworkDataHolder.networkArticleItems
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.ui.custom.ArticleItemView
 
@@ -29,6 +31,13 @@ class ArticleDiffCallback: DiffUtil.ItemCallback<ArticleItemData>(){
 
 }
 
+// TODO
+val toggleBookmark:(String, Boolean) -> Unit = { itemId, isBookmark ->
+    localArticleItems[itemId.toInt()] =
+        localArticleItems[itemId.toInt()].copy(isBookmark = isBookmark)
+}
+
+
 class ArticleVH(val containerView: View) : RecyclerView.ViewHolder(containerView) {
     fun bind(
         item: ArticleItemData?,
@@ -36,7 +45,7 @@ class ArticleVH(val containerView: View) : RecyclerView.ViewHolder(containerView
     ){
 
         //if use placeholder item may be null
-        (containerView as ArticleItemView).bind(item!!)
+        (containerView as ArticleItemView).bind(item!!, toggleBookmark)
         itemView.setOnClickListener { listener(item!!)}
 
     }
