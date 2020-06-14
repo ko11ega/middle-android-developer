@@ -170,12 +170,12 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
 
         menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                viewModel.handleSearchMode(false) //TODO true  -> false
+                viewModel.handleSearchMode(true) //TODO true  -> false
                 return true
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                viewModel.handleSearchMode(true) //TODO false -> true
+                viewModel.handleSearchMode(false) //TODO false -> true
                 return true
             }
 
