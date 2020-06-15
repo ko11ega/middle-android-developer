@@ -1,5 +1,6 @@
 package ru.skillbranch.skillarticles.ui.articles
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
@@ -34,7 +35,9 @@ class ArticleDiffCallback: DiffUtil.ItemCallback<ArticleItemData>(){
 // TODO
 val toggleBookmark:(String, Boolean) -> Unit = { itemId, isBookmark ->
     localArticleItems[itemId.toInt()] =
-        localArticleItems[itemId.toInt()].copy(isBookmark = isBookmark)
+        localArticleItems[itemId.toInt()].copy(isBookmark = !isBookmark)
+    Log.d("toggleBookmark", " localArticleItems[itemId.toInt()]: ${localArticleItems[itemId.toInt()]}")
+
 }
 
 

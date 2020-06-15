@@ -20,6 +20,14 @@ fun Date.shortFormat(pattern : String="dd.MM.yy"):String{
     return dateFormat.format(this)
 }
 
+fun Date.shortFormat(): String {
+    return this.format(if (isSameDay(Date())) "HH:mm" else "dd.MM.yy")
+}
+
+fun Date.isSameDay(date: Date): Boolean {
+    return this.time / DAY == date.time / DAY
+}
+
 fun Date.add(value: Int, units: TimeUnits=TimeUnits.SECOND):Date{
     var time = this.time
     time+=when(units){
