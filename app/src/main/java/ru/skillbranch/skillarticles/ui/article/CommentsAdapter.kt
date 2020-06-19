@@ -1,6 +1,7 @@
 package ru.skillbranch.skillarticles.ui.article
 import android.view.LayoutInflater
 import android.view.View import android.view.ViewGroup
+import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -58,6 +59,7 @@ class CommentVH(override val containerView: View, val listener:(CommentItemData)
              */
         } else {
             //if item null show placeholder
+            //tv_author_name = findViewById<TextView>(R.id.tv_author_name)
             tv_author_name.text = "Loading - need placeholder this"
         }
     }
