@@ -39,6 +39,22 @@ object ArticlesRepository {
         local.localArticleItems.addAll(articles)
             .apply { sleep(100) }
     }
+
+    /*
+    Bookmarks
+    Необходимо реализовать переключение isBookmark для статьи при клике по
+    CheckableImageView (R.id.iv_bookmark) в ArticleItemView
+    +1
+    Реализуй переключение isBookmark для статьи при клике по CheckableImageView (R.id.iv_bookmark)
+    в ArticleItemView для этого необходимо реализовать в ArticlesViewModel метод
+    fun handleToggleBookmark(id: String, isChecked: Boolean) и метод
+    fun updateBookmark(id: String, isChecked: Boolean) в ArticlesRepository
+ */
+    fun updateBookmark(id: String, isChecked: Boolean){
+        local.localArticleItems[id.toInt()] =
+            local.localArticleItems[id.toInt()].copy(isBookmark = isChecked)
+    }
+
 }
 
 class ArticlesDataFactory(val strategy: ArticleStrategy) :

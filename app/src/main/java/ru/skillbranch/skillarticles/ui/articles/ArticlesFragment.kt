@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_articles.*
 import ru.skillbranch.skillarticles.ui.base.BaseFragment
 import ru.skillbranch.skillarticles.R
+import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.base.MenuItemHolder
 import ru.skillbranch.skillarticles.ui.base.ToolbarBuilder
@@ -34,7 +35,7 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel>(){
                 R.layout.search_view_layout)
         )
     }
-
+/*
     private val articlesAdapter = ArticlesAdapter { item ->
         Log.e("ArticlesFragment", "click on article: ${item.id} ");
         val action = ArticlesFragmentDirections.actionNavArticlesToPageArticle(
@@ -50,6 +51,32 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel>(){
 
         viewModel.navigate(NavigationCommand.To(action.actionId, action.arguments))
     }
+*/
+    private val articlesAdapter = ArticlesAdapter(::onItemClickListener, ::onBookmarkClickListener)
+
+    private fun onItemClickListener(item: ArticleItemData) {
+        Log.e("ArticlesFragment", "Click on article: ${item.id}")
+
+        val action = ArticlesFragmentDirections.actionNavArticlesToPageArticle(
+            item.id,
+            item.author,
+            item.authorAvatar,
+            item.category,
+            item.categoryIcon,
+            item.poster,
+            item.title,
+            item.date
+        )
+
+        viewModel.navigate(NavigationCommand.To(action.actionId, action.arguments))
+    }
+
+    private fun onBookmarkClickListener(id: String, isBookmark: Boolean) {
+        Log.e("ArticlesFragment", "Click on bookmark: $id, state: $isBookmark")
+
+        viewModel.handleToggleBookmark(id, isBookmark)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

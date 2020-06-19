@@ -289,6 +289,7 @@ class ArticleItemView constructor(
         tv_comments_count.text = "${item.commentCount}"
         tv_read_duration.text = "${item.readDuration} min read"
         iv_bookmark.isChecked = item.isBookmark
+        //У тебя есть листенер, который слушает нажатие на вьюху.
         iv_bookmark.setOnClickListener { toggleBookmarkListener.invoke(item.id, item.isBookmark) }
     }
 }

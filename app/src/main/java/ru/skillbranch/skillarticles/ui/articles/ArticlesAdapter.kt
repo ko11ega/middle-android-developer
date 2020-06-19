@@ -7,11 +7,12 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.skillarticles.data.LocalDataHolder.localArticleItems
-import ru.skillbranch.skillarticles.data.NetworkDataHolder.networkArticleItems
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.ui.custom.ArticleItemView
 
-class ArticlesAdapter(private val listener: (ArticleItemData)-> Unit) :
+class ArticlesAdapter(
+    private val listener: (ArticleItemData)-> Unit,
+    private val bookmarkListener: (String, Boolean) -> Unit) :
     PagedListAdapter<ArticleItemData, ArticleVH>(ArticleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleVH {
@@ -20,7 +21,7 @@ class ArticlesAdapter(private val listener: (ArticleItemData)-> Unit) :
     }
 
     override fun onBindViewHolder(holder: ArticleVH, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), listener, bookmarkListener)
     }
 }
 
@@ -32,10 +33,10 @@ class ArticleDiffCallback: DiffUtil.ItemCallback<ArticleItemData>(){
 
 }
 
-// TODO
+// TODO переделать через ArticlesViewModel.handleToggleBookmark
 val toggleBookmark:(String, Boolean) -> Unit = { itemId, isBookmark ->
-    localArticleItems[itemId.toInt()] =
-        localArticleItems[itemId.toInt()].copy(isBookmark = !isBookmark)
+    localArticleItems[itemId.toInt()] = localArticleItems[itemId.toInt()].copy(isBookmark = !isBookmark)
+
     Log.d("toggleBookmark", " localArticleItems[itemId.toInt()]: ${localArticleItems[itemId.toInt()]}")
 
 }
@@ -44,11 +45,14 @@ val toggleBookmark:(String, Boolean) -> Unit = { itemId, isBookmark ->
 class ArticleVH(val containerView: View) : RecyclerView.ViewHolder(containerView) {
     fun bind(
         item: ArticleItemData?,
-        listener: (ArticleItemData) -> Unit
+        listener: (ArticleItemData) -> Unit,
+        bookmarkListener: (String, Boolean) -> Unit
     ){
 
         //if use placeholder item may be null
-        (containerView as ArticleItemView).bind(item!!, toggleBookmark)
+        (containerView as ArticleItemView).bind(item!!){id, isBookmark ->
+            bookmarkListener.invoke(id, isBookmark)
+        }
         itemView.setOnClickListener { listener(item!!)}
 
     }

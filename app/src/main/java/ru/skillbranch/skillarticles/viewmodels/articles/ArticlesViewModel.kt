@@ -7,6 +7,7 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.skillbranch.skillarticles.data.LocalDataHolder
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.data.repositories.ArticleStrategy
 import ru.skillbranch.skillarticles.data.repositories.ArticlesDataFactory
@@ -118,6 +119,23 @@ class ArticlesViewModel(handle: SavedStateHandle) :
 
     fun handleSearchMode(isSearch: Boolean) {
         updateState { it.copy(isSearch = isSearch)}
+    }
+
+    /*
+        Bookmarks
+        Необходимо реализовать переключение isBookmark для статьи при клике по
+        CheckableImageView (R.id.iv_bookmark) в ArticleItemView
+        +1
+        Реализуй переключение isBookmark для статьи при клике по CheckableImageView (R.id.iv_bookmark)
+        в ArticleItemView для этого необходимо реализовать в ArticlesViewModel метод
+        fun handleToggleBookmark(id: String, isChecked: Boolean) и метод
+        fun updateBookmark(id: String, isChecked: Boolean) в ArticlesRepository
+     */
+    fun handleToggleBookmark(id: String, isChecked: Boolean){
+        //LocalDataHolder.localArticleItems[id.toInt()] = LocalDataHolder.localArticleItems[id.toInt()].copy(isBookmark = !isChecked)
+        repository.updateBookmark(id, !isChecked)
+        //buildPagedList(repository.allArticles())
+        listData.value?.dataSource?.invalidate()
     }
 }
 
