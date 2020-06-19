@@ -59,8 +59,8 @@ class CommentVH(override val containerView: View, val listener:(CommentItemData)
              */
         } else {
             //if item null show placeholder
-            //tv_author_name = findViewById<TextView>(R.id.tv_author_name)
-            tv_author_name.text = "Loading - need placeholder this"
+            //tv_author_name = R.id.tv_author_name
+            //tv_author_name.text = "Loading - need placeholder this"
         }
     }
 }
