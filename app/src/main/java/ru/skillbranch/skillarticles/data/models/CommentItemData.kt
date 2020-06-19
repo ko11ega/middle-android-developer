@@ -1,6 +1,10 @@
 package ru.skillbranch.skillarticles.data.models
 
+import android.R
+import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import java.util.*
+
 
 data class CommentItemData(
     val id: String,

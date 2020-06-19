@@ -4,20 +4,26 @@ import android.view.View import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_comment.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.models.CommentItemData
+import ru.skillbranch.skillarticles.extensions.dpToIntPx
+import ru.skillbranch.skillarticles.extensions.shortFormat
 import ru.skillbranch.skillarticles.ui.custom.CommentItemView
 
 class CommentsAdapter(private val listener: (CommentItemData)-> Unit) :
     PagedListAdapter<CommentItemData, CommentVH>(CommentDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentVH {
-        val containerView = LayoutInflater.from(parent.context).inflate(
+        val containerView = CommentItemView(parent.context) //TODO
+
+            /*LayoutInflater.from(parent.context).inflate(
             R.layout.item_comment,
             parent,
             false
-        )
+        )*/
 
         return CommentVH(containerView, listener) //TODO video 1:17:18
     }
@@ -35,7 +41,21 @@ class CommentVH(override val containerView: View, val listener:(CommentItemData)
         //TODO bind data -> ViewHolder (containerView as CommentItemView).bind(item)
         if (item != null) {
             itemView.setOnClickListener {listener(item)}
+            (containerView as CommentItemView).bind(item)
+
+            /*
             tv_author_name.text = item.user.name
+            tv_comment_date.text = item.date.shortFormat() //TODO
+            tv_comment_body.text = item.body //TODO
+            val context = containerView.context // TODO
+            val avatarSize = context.dpToIntPx(40) //TODO
+            Glide.with(context)
+                .load(item.user.avatar)
+                .apply(RequestOptions.circleCropTransform())
+                .override(avatarSize)
+                .into(iv_avatar)
+
+             */
         } else {
             //if item null show placeholder
             tv_author_name.text = "Loading - need placeholder this"
