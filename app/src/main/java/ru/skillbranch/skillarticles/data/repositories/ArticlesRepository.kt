@@ -16,12 +16,38 @@ object ArticlesRepository {
     fun allArticles(): ArticlesDataFactory =
         ArticlesDataFactory(ArticleStrategy.AllArticles(::findArticlesByRange))
 
+    // TODO
+    fun allBookmarksArticles(): ArticlesDataFactory =
+        ArticlesDataFactory(ArticleStrategy.BookmarkArticles(::findBookmarksArticles))
+
+    // TODO
+    fun findBookmarksArticles(searchQuery: String) =
+        ArticlesDataFactory(ArticleStrategy.SearchBookmark(::searchBookmarksArticles, searchQuery))
+
+
     fun searchArticles(searchQuery: String) =
         ArticlesDataFactory(ArticleStrategy.SearchArticle(::searchArticlesByTitle, searchQuery))
 
     private fun findArticlesByRange(start: Int, size: Int) = local.localArticleItems
         .drop(start)
         .take(size)
+
+    // TODO
+    private fun findBookmarksArticles(start: Int, size: Int) = local.localArticleItems
+        .asSequence()
+        .filter{it.isBookmark}
+        .drop(start)
+        .take(size)
+        .toList()
+
+    // TODO
+    private fun searchBookmarksArticles(start: Int, size: Int, queryTitle: String) = local.localArticleItems
+        .asSequence()
+        .filter{it.isBookmark}
+        .filter {it.title.contains(queryTitle, true) }
+        .drop(start)
+        .take(size)
+        .toList()
 
     private fun searchArticlesByTitle(start: Int, size: Int, queryTitle: String) = local.localArticleItems
         .asSequence()
@@ -105,6 +131,20 @@ sealed class ArticleStrategy() {
     }
 
     //TODO bookmarks Strategy
+    class SearchBookmark(
+        private val itemProvider: (Int, Int, String) -> List<ArticleItemData>,
+        private val query: String
+    ) : ArticleStrategy(){
+        override fun getItems(start: Int, size: Int): List<ArticleItemData> =
+            itemProvider(start, size, query)
+    }
+
+    class BookmarkArticles(
+        private val itemProvider: (Int, Int) -> List<ArticleItemData>
+    ) : ArticleStrategy(){
+        override fun getItems(start: Int, size: Int): List<ArticleItemData> =
+            itemProvider(start, size)
+    }
 
 }
 
