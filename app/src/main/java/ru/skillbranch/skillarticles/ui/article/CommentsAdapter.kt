@@ -1,18 +1,13 @@
 package ru.skillbranch.skillarticles.ui.article
-import android.view.LayoutInflater
-import android.view.View import android.view.ViewGroup
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_comment.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.models.CommentItemData
-import ru.skillbranch.skillarticles.extensions.dpToIntPx
-import ru.skillbranch.skillarticles.extensions.shortFormat
 import ru.skillbranch.skillarticles.ui.custom.CommentItemView
 
 class CommentsAdapter(private val listener: (CommentItemData)-> Unit) :
@@ -59,8 +54,8 @@ class CommentVH(override val containerView: View, val listener:(CommentItemData)
              */
         } else {
             //if item null show placeholder
-            //tv_author_name = R.id.tv_author_name
-            //tv_author_name.text = "Loading - need placeholder this"
+            //var tv_author: TextView = (containerView as CommentItemView).tv_author
+            //tv_author.text =  "Loading - need placeholder this"
         }
     }
 }
