@@ -17,11 +17,11 @@ object ArticlesRepository {
         ArticlesDataFactory(ArticleStrategy.AllArticles(::findArticlesByRange))
 
     // TODO
-    fun allBookmarksArticles(): ArticlesDataFactory =
+    fun bookmarkArticles(): ArticlesDataFactory =
         ArticlesDataFactory(ArticleStrategy.BookmarkArticles(::findBookmarksArticles))
 
     // TODO
-    fun findBookmarksArticles(searchQuery: String) =
+    fun searchBookmarks(searchQuery: String) =
         ArticlesDataFactory(ArticleStrategy.SearchBookmark(::searchBookmarksArticles, searchQuery))
 
 
