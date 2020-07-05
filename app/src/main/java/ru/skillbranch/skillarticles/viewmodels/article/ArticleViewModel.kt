@@ -188,6 +188,33 @@ class ArticleViewModel(
     }
 
     override fun handleSendComment(comment: String) {
+        /*if (comment == null) {
+            notify(Notify.TextMessage("Comment must be not empty"))
+            return
+        }
+        updateState { it.copy(commentInitial = comment) }
+        if (!currentState.isAuth) {
+            navigate(NavigationCommand.StartLogin())
+        } else {
+            viewModelScope.launch {
+                repository.sendComment(
+                    articleId,
+                    currentState.commentInitial!!,
+                    currentState.answerToSlug
+                )
+                withContext(Dispatchers.Main) {
+                    updateState {
+                        it.copy(
+                            answerTo = null,
+                            answerToSlug = null,
+                            commentInitial = null
+                        )
+                    }
+                }
+            }
+
+        }*/
+
         updateState { it.copy(commentInitial = comment) }
         saveState()
         if (!currentState.isAuth) navigate(NavigationCommand.StartLogin())
@@ -195,7 +222,7 @@ class ArticleViewModel(
             viewModelScope.launch {
                 repository.sendComment(articleId, comment, currentState.answerToSlug)
                 withContext(Dispatchers.Main){
-                    updateState { it.copy(answerTo = null, answerToSlug = null) }
+                    updateState { it.copy(answerTo = null, answerToSlug = null, commentInitial = null) }
                     saveState()
                 }
             }
@@ -267,6 +294,8 @@ data class ArticleState(
         outState.set("searchQuery", searchQuery)
         outState.set("searchResults", searchResults)
         outState.set("searchPosition", searchPosition)
+        outState.set("answerTo", answerTo)
+        outState.set("answerToSlug", answerToSlug)
     }
 
     override fun restore(savedState: SavedStateHandle): ArticleState {
@@ -276,7 +305,11 @@ data class ArticleState(
             isSearch = savedState["isSearch"] ?: false,
             searchQuery =  savedState["searchQuery"],
             searchResults = savedState["searchResults"] ?: emptyList(),
-            searchPosition = savedState["searchPosition"] ?: 0
+            searchPosition = savedState["searchPosition"] ?: 0,
+            answerTo = savedState["answerTo"],
+            answerToSlug = savedState["answerToSlug"]
+
+
         )
     }
 }

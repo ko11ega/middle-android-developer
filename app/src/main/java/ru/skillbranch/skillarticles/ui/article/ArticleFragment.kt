@@ -242,12 +242,17 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
         var isFocusedSearch: Boolean = false
         var searchQuery: String? = null
 
-        private var isLoadingContent by RenderProp(true)
+        private var isLoadingContent by RenderProp(false) {
+            Log.e("ArticleFragment", "content is loading: $it");
+            tv_text_content.isLoading = it
+            if (it) setupCopyListener()
+        }
+        //private var isLoadingContent by RenderProp(true)
         private var isLike: Boolean by RenderProp(false) {bottombar.btn_like.isChecked =it}
         private var isBookmark: Boolean by RenderProp(false) {
             bottombar.btn_bookmark.isChecked =it
         }
-        private var isShowMenu: Boolean by RenderProp(true) {
+        private var isShowMenu: Boolean by RenderProp(false) {
             bottombar.btn_settings.isChecked = it
             if (it) submenu.open() else submenu.close()
         }
@@ -297,12 +302,16 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
         }
 
         var commentInitial by RenderProp("") {
+            et_comment.setText(it)
+            if (it.isBlank() && et_comment.hasFocus()) et_comment.clearFocus()
+            /*
             if (it.isBlank()) {
                 et_comment.text = null
             } else {
                 Log.e("ArticleFragment", "binding.commentInitial: $it")
                 et_comment.setText(it)
             }
+             */
         }
 
         private var answerTo by RenderProp("Comment"){wrap_comments.hint = it}
