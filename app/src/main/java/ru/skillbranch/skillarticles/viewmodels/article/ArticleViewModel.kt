@@ -188,12 +188,15 @@ class ArticleViewModel(
     }
 
     override fun handleSendComment(comment: String) {
+        updateState { it.copy(commentInitial = comment) }
+        saveState()
         if (!currentState.isAuth) navigate(NavigationCommand.StartLogin())
         else {
             viewModelScope.launch {
                 repository.sendComment(articleId, comment, currentState.answerToSlug)
                 withContext(Dispatchers.Main){
                     updateState { it.copy(answerTo = null, answerToSlug = null) }
+                    saveState()
                 }
             }
         }
@@ -222,7 +225,7 @@ class ArticleViewModel(
     }
 
     fun handleClearComment(){
-        updateState { it.copy(answerTo = null, answerToSlug = null) }
+        updateState { it.copy(commentInitial = null, answerTo = null, answerToSlug = null) }
     }
 
     fun handleReplyTo(slug: String, name: String){
@@ -251,6 +254,7 @@ data class ArticleState(
     val author: Any? = null, //author of article
     val poster: String? = null, //cover of article
     val content: List<MarkdownElement> = emptyList(),//content
+    val commentInitial: String? = null,
     val commentsCount: Int = 0,
     val answerTo: String? = null,
     val answerToSlug:String? = null,
@@ -258,6 +262,7 @@ data class ArticleState(
 ) : IViewModelState {
     override fun save(outState: SavedStateHandle) {
         //TODO save state
+        outState.set("commentInitial", commentInitial)
         outState.set("isSearch", isSearch)
         outState.set("searchQuery", searchQuery)
         outState.set("searchResults", searchResults)
@@ -267,6 +272,7 @@ data class ArticleState(
     override fun restore(savedState: SavedStateHandle): ArticleState {
         //TODO restore state
         return copy(
+            commentInitial = savedState["commentInitial"],
             isSearch = savedState["isSearch"] ?: false,
             searchQuery =  savedState["searchQuery"],
             searchResults = savedState["searchResults"] ?: emptyList(),

@@ -296,6 +296,15 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
 
         }
 
+        var commentInitial by RenderProp("") {
+            if (it.isBlank()) {
+                et_comment.text = null
+            } else {
+                Log.e("ArticleFragment", "binding.commentInitial: $it")
+                et_comment.setText(it)
+            }
+        }
+
         private var answerTo by RenderProp("Comment"){wrap_comments.hint = it}
         private var isShowBottombar by RenderProp(true){
             if(it) bottombar.show() else bottombar.hide()
@@ -337,6 +346,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
             searchResults = data.searchResults
             answerTo = data.answerTo ?: "Comment"
             isShowBottombar = data.showBottomBar
+            commentInitial = data.commentInitial ?: ""
         }
 
         override fun saveUi(outState: Bundle) {
