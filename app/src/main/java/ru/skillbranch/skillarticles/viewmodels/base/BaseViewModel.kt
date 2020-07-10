@@ -39,7 +39,7 @@ abstract class BaseViewModel<T : IViewModelState>(
      * модифицированное состояние, которое присваивается текущему состоянию
      */
     @UiThread
-    protected inline fun updateState(update: (currentState: T) -> T) {
+    inline fun updateState(update: (currentState: T) -> T) {
         val updatedState: T = update(currentState)
         state.value = updatedState
     }
@@ -54,7 +54,7 @@ abstract class BaseViewModel<T : IViewModelState>(
         notifications.value = Event(content)
     }
 
-    open fun navigate(command:NavigationCommand){
+    open fun navigate(command: NavigationCommand) {
         navigation.value = Event(command)
     }
 
@@ -64,6 +64,7 @@ abstract class BaseViewModel<T : IViewModelState>(
      */
     fun observeState(owner: LifecycleOwner, onChanged: (newState: T) -> Unit) {
         state.observe(owner, Observer { onChanged(it!!) })
+
     }
 
     /***
@@ -95,14 +96,17 @@ abstract class BaseViewModel<T : IViewModelState>(
         }
     }
 
-    fun saveState(){
+    open fun saveState() {
         currentState.save(handleState)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun restoreState(){
+    fun restoreState() {
+        val restoredState = currentState.restore(handleState) as T
+        if(currentState == restoredState) return
         state.value = currentState.restore(handleState) as T
     }
+
 }
 
 class Event<out E>(private val content: E) {
@@ -137,7 +141,7 @@ class EventObserver<E>(private val onEventUnhandledContent: (E) -> Unit) : Obser
     }
 }
 
-sealed class Notify { // TODO remove default constructor Notify()
+sealed class Notify() {
     abstract val message: String
 
     data class TextMessage(override val message: String) : Notify()
@@ -155,7 +159,7 @@ sealed class Notify { // TODO remove default constructor Notify()
     ) : Notify()
 }
 
-sealed class NavigationCommand { // TODO remove default constructor NavigationCommand()
+sealed class NavigationCommand() {
     data class To(
         val destination: Int,
         val args: Bundle? = null,
@@ -165,23 +169,9 @@ sealed class NavigationCommand { // TODO remove default constructor NavigationCo
 
     data class StartLogin(
         val privateDestination: Int? = null
-    ): NavigationCommand()
+    ) : NavigationCommand()
 
     data class FinishLogin(
         val privateDestination: Int? = null
-    ): NavigationCommand()
+    ) : NavigationCommand()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

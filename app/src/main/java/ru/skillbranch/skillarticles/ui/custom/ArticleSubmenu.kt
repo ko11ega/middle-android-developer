@@ -21,7 +21,7 @@ class ArticleSubmenu @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) , CoordinatorLayout.AttachedBehavior {
     override fun getBehavior(): CoordinatorLayout.Behavior<ArticleSubmenu> {
-        return SubmenuBehavior() //TODO
+        return SubmenuBehavior()
     }
     var isOpen = false
     private var centerX: Float = context.dpToPx(200)

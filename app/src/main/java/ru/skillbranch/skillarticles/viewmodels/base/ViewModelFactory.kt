@@ -1,4 +1,4 @@
-//@file:Suppress("UNCHECKED_CAST")
+@file:Suppress("UNCHECKED_CAST")
 
 package ru.skillbranch.skillarticles.viewmodels.base
 
@@ -31,10 +31,3 @@ class ViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-
-
-
-
-
-
-
