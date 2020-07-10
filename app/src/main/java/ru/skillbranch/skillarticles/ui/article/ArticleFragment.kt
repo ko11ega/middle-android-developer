@@ -196,8 +196,8 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
         wrap_comments.setEndIconOnClickListener { view ->
             view.context.hideKeyboard(view)
             viewModel.handleClearComment()
-//            et_comment.text = null
-//            et_comment.clearFocus()
+            //et_comment.text = null
+            //et_comment.clearFocus()
         }
 
         with(rv_comments) {
@@ -296,6 +296,8 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
         }
     }
 
+
+
     private fun setupCopyListener() {
         tv_text_content.setCopyListener { copy ->
             val clipboard =
@@ -358,10 +360,10 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
             }
         }
 
-        private var searchResults: List<Pair<Int, Int>> by RenderProp(emptyList())
+        private var searchResults: List<Pair<Int, Int>> by RenderProp(emptyList<Pair<Int, Int>>())
         private var searchPosition: Int by RenderProp(0)
 
-        private var content: List<MarkdownElement> by RenderProp(emptyList()) {
+        private var content: List<MarkdownElement> by RenderProp(emptyList<MarkdownElement>()) {
             tv_text_content.setContent(it)
         }
 
@@ -371,11 +373,21 @@ class ArticleFragment : BaseFragment<ArticleViewModel>(), IArticleView {
             if (submenu.isOpen) submenu.isVisible = it
         }
 
+        var comment by RenderProp("") {
+            if (it.isBlank()) {
+                et_comment.text = null
+            } else {
+                Log.e("ArticleFragment", "binding.comment: $it")
+                et_comment.setText(it)
+            }
+        }
+
+        /* TODO
         private var comment by RenderProp("") {
             et_comment.setText(it)
             if (it.isBlank() && et_comment.hasFocus()) et_comment.clearFocus()
         }
-
+*/
         override val afterInflated: (() -> Unit)? = {
             dependsOn<Boolean, Boolean, List<Pair<Int, Int>>, Int>(
                 ::isLoadingContent,

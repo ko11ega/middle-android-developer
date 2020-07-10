@@ -186,11 +186,13 @@ class ArticleViewModel(
     }
 
     override fun handleSendComment(comment: String?) {
+        updateState { it.copy(commentText = comment) }
+        saveState()
         if (comment == null) {
             notify(Notify.TextMessage("Comment must be not empty"))
             return
         }
-        updateState { it.copy(commentText = comment) }
+        //updateState { it.copy(commentText = comment) }
         if (!currentState.isAuth) {
             navigate(NavigationCommand.StartLogin())
         } else {
@@ -237,7 +239,7 @@ class ArticleViewModel(
     }
 
     fun handleClearComment() {
-        updateState { it.copy(answerTo = null, answerToSlug = null, commentText = null) }
+        updateState { it.copy(commentText = null, answerTo = null, answerToSlug = null) }
     }
 
     fun handleReplyTo(slug: String, name: String) {
@@ -275,7 +277,6 @@ data class ArticleState(
 
 ) : IViewModelState {
     override fun save(outState: SavedStateHandle) {
-
         outState.set("isSearch", isSearch)
         outState.set("searchQuery", searchQuery)
         outState.set("searchResults", searchResults)
@@ -287,6 +288,7 @@ data class ArticleState(
 
     override fun restore(savedState: SavedStateHandle): ArticleState {
         return copy(
+            //commentInitial = savedState["commentInitial"],
             isSearch = savedState["isSearch"] ?: false,
             searchQuery = savedState["searchQuery"],
             searchResults = savedState["searchResults"] ?: emptyList(),
