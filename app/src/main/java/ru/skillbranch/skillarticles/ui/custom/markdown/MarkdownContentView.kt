@@ -14,10 +14,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
+import ru.skillbranch.skillarticles.extensions.ShimmerDrawable
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.groupByBounds
 import ru.skillbranch.skillarticles.extensions.setPaddingOptionally
-import ru.skillbranch.skillarticles.ui.custom.ShimmerDrawable
+//import ru.skillbranch.skillarticles.ui.custom.ShimmerDrawable
 import kotlin.properties.Delegates
 
 class MarkdownContentView @JvmOverloads constructor(
