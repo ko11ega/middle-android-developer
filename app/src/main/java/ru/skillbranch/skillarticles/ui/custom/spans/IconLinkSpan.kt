@@ -41,14 +41,14 @@ class IconLinkSpan(
         val textStart = x + iconSize + padding
         paint.forLine {
             path.reset()
-            path.moveTo(textStart, y+paint.descent())
-            path.lineTo(textStart + textWidth, y+paint.descent())
+            path.moveTo(textStart, y + paint.descent())
+            path.lineTo(textStart + textWidth, y + paint.descent())
             canvas.drawPath(path, paint)
         }
 
         canvas.save()
-        val trY = y + paint.descent() - linkDrawable.bounds.bottom //TODO убрал y+paint.descent()
-        canvas.translate(x + padding/2f, trY.toFloat())
+        val trY = y + paint.descent() - linkDrawable.bounds.bottom
+        canvas.translate(x + padding/2f, trY)
         linkDrawable.draw(canvas)
         canvas.restore()
 
@@ -65,6 +65,7 @@ class IconLinkSpan(
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
+
         if (fm != null) {
             iconSize = fm.descent - fm.ascent //fontSize
             linkDrawable.setBounds(0, 0, iconSize, iconSize)
@@ -93,8 +94,12 @@ class IconLinkSpan(
 
     private inline fun Paint.forText(block: () -> Unit) {
         val oldColor = color
+
         color = textColor
+
         block()
+
         color = oldColor
     }
+
 }

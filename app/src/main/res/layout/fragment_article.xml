@@ -67,7 +67,7 @@
 
         <ImageView
             android:id="@+id/iv_poster"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -83,14 +83,14 @@
             android:id="@+id/tv_text_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:focusable="true"
             android:clipToPadding="false"
+            android:focusable="true"
             android:focusableInTouchMode="true"
-            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            android:minHeight="1950dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_poster"/>
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_poster" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/wrap_comments"
@@ -99,12 +99,13 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorSurface"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Comment"
             android:padding="16dp"
             android:theme="@style/TextInputLayoutAppearance"
             app:endIconDrawable="@drawable/ic_close_black_24dp"
             app:endIconMode="custom"
-            app:endIconTint ="@color/color_gray"
+            app:endIconTint="@color/color_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_text_content">
@@ -115,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSend"
                 android:inputType="text"
-                tools:text="comment text"/>
+                tools:text="comment text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -129,7 +130,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/wrap_comments"
-            tools:listItem="@layout/item_comment" />
+            tools:listitem="@layout/item_comment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

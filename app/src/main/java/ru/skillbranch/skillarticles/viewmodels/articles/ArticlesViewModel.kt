@@ -7,7 +7,6 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.skillbranch.skillarticles.data.LocalDataHolder
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.data.repositories.ArticleStrategy
 import ru.skillbranch.skillarticles.data.repositories.ArticlesDataFactory
@@ -19,7 +18,7 @@ import java.util.concurrent.Executors
 
 class ArticlesViewModel(handle: SavedStateHandle) :
     BaseViewModel<ArticlesState>(handle, ArticlesState()) {
-    val repository = ArticlesRepository
+    private val repository = ArticlesRepository
     private val listConfig by lazy {
         PagedList.Config.Builder()
             .setEnablePlaceholders(false)
@@ -29,29 +28,33 @@ class ArticlesViewModel(handle: SavedStateHandle) :
             .build()
     }
     private val listData = Transformations.switchMap(state) {
+        val searchFn = if (!it.isBookmark) repository::searchArticles
+        else repository::searchBookmarkedArticles
+
+        val defaultFn = if (!it.isBookmark) repository::allArticles
+        else repository::allBookmarked
+
         when {
             it.isSearch && !it.searchQuery.isNullOrBlank() -> buildPagedList(
-                repository.searchArticles(
-                    it.searchQuery
-                )
+                searchFn(it.searchQuery)
             )
-            else -> buildPagedList(repository.allArticles())
+            else -> buildPagedList(defaultFn())
         }
     }
 
-
     fun observeList(
         owner: LifecycleOwner,
+        isBookmark: Boolean = false,
         onChange: (list: PagedList<ArticleItemData>) -> Unit
     ) {
-        listData.observe(owner, Observer {onChange(it)})
+        updateState { it.copy(isBookmark = isBookmark) }
+        listData.observe(owner, Observer { onChange(it) })
     }
-
 
     private fun buildPagedList(
         dataFactory: ArticlesDataFactory
     ): LiveData<PagedList<ArticleItemData>> {
-        val builder = LivePagedListBuilder<Int, ArticleItemData> (
+        val builder = LivePagedListBuilder<Int, ArticleItemData>(
             dataFactory,
             listConfig
         )
@@ -72,7 +75,6 @@ class ArticlesViewModel(handle: SavedStateHandle) :
     }
 
     private fun itemAtEndHandle(lastLoadArticle: ArticleItemData) {
-        Log.e("ArticlesViewModel", "ItemAtEndHandle: ");
         viewModelScope.launch(Dispatchers.IO) {
             val items = repository.loadArticlesFromNetwork(
                 start = lastLoadArticle.id.toInt().inc(),
@@ -96,7 +98,6 @@ class ArticlesViewModel(handle: SavedStateHandle) :
     }
 
     private fun zeroLoadingHandle() {
-        Log.e("ArticlesViewModel", "zeroLoadingHandle: ");
         notify(Notify.TextMessage("Storage is empty"))
         viewModelScope.launch(Dispatchers.IO) {
             val items =
@@ -106,7 +107,7 @@ class ArticlesViewModel(handle: SavedStateHandle) :
                 )
             if (items.isNotEmpty()) {
                 repository.insertArticlesToDb(items)
-                //invalidate data in datasource -> create new LiveData<PagedList>
+                //invalidate data in data source -> create new LiveData<PagedList>
                 listData.value?.dataSource?.invalidate()
             }
         }
@@ -118,32 +119,22 @@ class ArticlesViewModel(handle: SavedStateHandle) :
     }
 
     fun handleSearchMode(isSearch: Boolean) {
-        updateState { it.copy(isSearch = isSearch)}
+        updateState { it.copy(isSearch = isSearch) }
     }
 
-    /*
-        Bookmarks
-        Необходимо реализовать переключение isBookmark для статьи при клике по
-        CheckableImageView (R.id.iv_bookmark) в ArticleItemView
-        +1
-        Реализуй переключение isBookmark для статьи при клике по CheckableImageView (R.id.iv_bookmark)
-        в ArticleItemView для этого необходимо реализовать в ArticlesViewModel метод
-        fun handleToggleBookmark(id: String, isChecked: Boolean) и метод
-        fun updateBookmark(id: String, isChecked: Boolean) в ArticlesRepository
-     */
-    fun handleToggleBookmark(id: String, isChecked: Boolean){
-        //LocalDataHolder.localArticleItems[id.toInt()] = LocalDataHolder.localArticleItems[id.toInt()].copy(isBookmark = !isChecked)
+    fun handleToggleBookmark(id: String, isChecked: Boolean) {
         repository.updateBookmark(id, !isChecked)
-        //buildPagedList(repository.allArticles())
         listData.value?.dataSource?.invalidate()
     }
 }
 
 data class ArticlesState(
-    val isSearch: Boolean =false,
+    val isSearch: Boolean = false,
     val searchQuery: String? = null,
-    val isLoading: Boolean = true
-): IViewModelState
+    val isLoading: Boolean = true,
+    val isBookmark: Boolean = false
+) : IViewModelState
+
 
 class ArticlesBoundaryCallback(
     private val zeroLoadingHandle: () -> Unit,
@@ -160,26 +151,3 @@ class ArticlesBoundaryCallback(
         itemAtEndHandle(itemAtEnd)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,7 +6,6 @@ import android.graphics.*
 import android.os.Parcel
 import android.os.Parcelable
 import android.text.Spannable
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -58,19 +57,19 @@ class MarkdownImageView private constructor(
     var tv_alt: TextView? = null
 
     @Px
-    private val titleTopMargin: Int = context.dpToIntPx(8) //8dp
+    private val titleTopMargin: Int = context.dpToIntPx(8)
     @Px
-    private val titlePadding: Int = context.dpToIntPx(56)//56dp
+    private val titlePadding: Int = context.dpToIntPx(56)
     @Px
-    private val cornerRadius: Float = context.dpToPx(4)//4dp
+    private val cornerRadius: Float = context.dpToPx(4)
     @ColorInt
-    private val colorSurface: Int = context.attrValue(R.attr.colorSurface)//colorSurface
+    private val colorSurface: Int = context.attrValue(R.attr.colorSurface)
     @ColorInt
-    private val colorOnSurface: Int = context.attrValue(R.attr.colorOnSurface)///colorOnSurface
+    private val colorOnSurface: Int = context.attrValue(R.attr.colorOnSurface)
     @ColorInt
-    private val colorOnBackground: Int = context.attrValue(R.attr.colorOnBackground)///colorOnBackground
+    private val colorOnBackground: Int = context.attrValue(R.attr.colorOnBackground)
     @ColorInt
-    private var lineColor: Int = context.attrValue(R.attr.colorOnBackground) //TODO context.attrValue(R.color.color_divider)//R.color.color_divider
+    private var lineColor: Int = context.getColor(R.color.color_divider)
 
     //for draw object allocation
     private var linePositionY: Float = 0f
@@ -79,11 +78,11 @@ class MarkdownImageView private constructor(
         strokeWidth = 0f
     }
 
-    private var isOpen =  false
+    private var isOpen = false
     private var aspectRatio = 0f
 
     init {
-        layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         iv_image = ImageView(context).apply {
             outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
@@ -97,7 +96,7 @@ class MarkdownImageView private constructor(
         }
         addView(iv_image)
 
-        tv_title = MarkdownTextView(context,fontSize * 0.75f).apply {
+        tv_title = MarkdownTextView(context, fontSize * 0.75f).apply {
             setTextColor(colorOnBackground)
             gravity = Gravity.CENTER
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
@@ -121,7 +120,7 @@ class MarkdownImageView private constructor(
         tv_title.setText(title, TextView.BufferType.SPANNABLE)
 
 
-        if(alt!=null){
+        if (alt != null) {
             tv_alt = TextView(context).apply {
                 text = alt
                 setTextColor(colorOnSurface)
@@ -133,8 +132,8 @@ class MarkdownImageView private constructor(
             }
             addView(tv_alt)
 
-            iv_image.setOnClickListener{
-                if(tv_alt?.isVisible ==true) animateHideAlt()
+            iv_image.setOnClickListener {
+                if (tv_alt?.isVisible == true) animateHideAlt()
                 else animateShowAlt()
                 isOpen = !isOpen
             }
@@ -158,21 +157,20 @@ class MarkdownImageView private constructor(
 
         //create measureSpec for children EXACTLY
         //all children width == parent width (constraint parent width)
-        val ms =MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+        val ms = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
 
         if (aspectRatio != 0f) {
             //restore width/height by aspectRatio
             val hms =
-                MeasureSpec.makeMeasureSpec((width/aspectRatio).toInt(), MeasureSpec.EXACTLY)
+                MeasureSpec.makeMeasureSpec((width / aspectRatio).toInt(), MeasureSpec.EXACTLY)
             iv_image.measure(ms, hms)
         } else iv_image.measure(ms, heightMeasureSpec)
-
         tv_title.measure(ms, heightMeasureSpec)
         tv_alt?.measure(ms, heightMeasureSpec)
 
         usedHeight += iv_image.measuredHeight
         usedHeight += titleTopMargin
-        linePositionY = usedHeight + tv_title.measuredHeight/2f
+        linePositionY = usedHeight + tv_title.measuredHeight / 2f
         usedHeight += tv_title.measuredHeight
 
         setMeasuredDimension(width, usedHeight)
@@ -181,9 +179,9 @@ class MarkdownImageView private constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         var usedHeight = 0
-        val bodyWith = r - l - paddingLeft - paddingRight
+        val bodyWidth = r - l - paddingLeft - paddingRight
         val left = paddingLeft
-        val right = paddingLeft + bodyWith
+        val right = paddingLeft + bodyWidth
 
         iv_image.layout(
             left,
@@ -230,7 +228,6 @@ class MarkdownImageView private constructor(
             linePositionY,
             linePaint
         )
-        Log.e("MarkdownImageView", "dr: ")
     }
 
     private fun animateShowAlt() {
@@ -278,7 +275,7 @@ class MarkdownImageView private constructor(
 
     private class SavedState : BaseSavedState, Parcelable {
         var ssIsOpen: Boolean = false
-        var ssAspectRatio: Float = 0F
+        var ssAspectRatio: Float = 0f
 
         constructor(superState: Parcelable?) : super(superState)
 
@@ -291,7 +288,7 @@ class MarkdownImageView private constructor(
         override fun writeToParcel(dst: Parcel, flags: Int) {
             //write state to parcel
             super.writeToParcel(dst, flags)
-            dst.writeInt(if(ssIsOpen) 1 else 0)
+            dst.writeInt(if (ssIsOpen) 1 else 0)
             dst.writeFloat(ssAspectRatio)
         }
 
@@ -308,7 +305,7 @@ class MarkdownImageView private constructor(
 
 class AspectRatioResizeTransform : BitmapTransformation() {
     private val ID =
-        "ru.skillbranch.skillarticles.glide.AspectRatioResizeTransform"
+        "ru.skillbranch.skillarticles.glide.AspectRatioResizeTransform" //any unique string
     private val ID_BYTES = ID.toByteArray(Charset.forName("UTF-8"))
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
         messageDigest.update(ID_BYTES)
@@ -322,11 +319,11 @@ class AspectRatioResizeTransform : BitmapTransformation() {
     ): Bitmap {
         val originWidth = toTransform.width
         val originHeight = toTransform.height
-        val aspectRatio = originWidth.toFloat()/originHeight
+        val aspectRatio = originWidth.toFloat() / originHeight
         return Bitmap.createScaledBitmap(
             toTransform,
             outWidth,
-            (outWidth/aspectRatio).toInt(),
+            (outWidth / aspectRatio).toInt(),
             true
         )
     }

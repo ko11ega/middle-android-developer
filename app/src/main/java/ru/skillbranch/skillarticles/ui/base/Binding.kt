@@ -14,7 +14,6 @@ abstract class Binding {
         if (!isInflated) {
             afterInflated?.invoke()
             isInflated = true
-            rebind()
         }
     }
 
@@ -23,7 +22,6 @@ abstract class Binding {
     }
 
     abstract fun bind(data: IViewModelState)
-
     /**
      * override this if need save binding in bundle
      */
