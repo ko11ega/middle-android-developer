@@ -11,7 +11,7 @@ interface IViewModelState {
     }
 
     /**
-     * override this if need restore state from bundle
+     * override this if need restore state in bundle
      */
     fun restore(savedState: SavedStateHandle) : IViewModelState{
         //default empty implementation

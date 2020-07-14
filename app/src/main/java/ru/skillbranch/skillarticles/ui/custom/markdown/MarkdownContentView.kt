@@ -1,10 +1,9 @@
 package ru.skillbranch.skillarticles.ui.custom.markdown
-
+import android.util.Log
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,10 @@ import android.widget.TextView
 import androidx.core.util.isEmpty
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
-import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
-import ru.skillbranch.skillarticles.extensions.ShimmerDrawable
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.groupByBounds
 import ru.skillbranch.skillarticles.extensions.setPaddingOptionally
-//import ru.skillbranch.skillarticles.ui.custom.ShimmerDrawable
 import kotlin.properties.Delegates
 
 class MarkdownContentView @JvmOverloads constructor(
@@ -28,6 +24,7 @@ class MarkdownContentView @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
     private lateinit var elements: List<MarkdownElement>
     private var layoutManager: LayoutManager = LayoutManager()
+    private var index = 0 // TODO
 
     var textSize by Delegates.observable(14f) { _, old, value ->
         if (value == old) return@observable
@@ -36,91 +33,8 @@ class MarkdownContentView @JvmOverloads constructor(
             it.fontSize = value
         }
     }
-    var isLoading by Delegates.observable(false) { _, _, newValue ->
-        Log.e("MarkdownContentView", "isLoading : $newValue");
-        if (!newValue) hideShimmer()
-        else showShimmer()
-    }
-    private val defaultSpace = context.dpToIntPx(8)
-    private val defaultPadding = context.dpToIntPx(16)
-    private val lineHeight = context.dpToIntPx(14)
-    private val miniLineHeight = context.dpToIntPx(12)
-    private val shimmerWidth = resources.displayMetrics.widthPixels - context.dpToIntPx(32)
-
-    private val shimmerDrawable by lazy {
-        ShimmerDrawable.Builder()
-            .setShimmerWidth(shimmerWidth)
-            .addShape(
-                ShimmerDrawable.Shape.TextRow(
-                    shimmerWidth,
-                    6,
-                    lineHeight = lineHeight,
-                    lineSpace = defaultSpace,
-                    cornerRadius = defaultSpace,
-                    offset = defaultPadding to defaultPadding
-                )
-            )
-            .addShape(
-                ShimmerDrawable.Shape.ImagePlaceholder(
-                    shimmerWidth,
-                    16 / 9f,
-                    borderWidth = defaultSpace,
-                    cornerRadius = defaultSpace,
-                    offset = defaultPadding to defaultSpace
-                )
-            )
-            .addShape(
-                ShimmerDrawable.Shape.TextRow(
-                    shimmerWidth - 4 * defaultPadding,
-                    1,
-                    lineHeight = miniLineHeight,
-                    lineSpace = defaultSpace / 2,
-                    cornerRadius = defaultSpace,
-                    offset = 3 * defaultPadding to defaultSpace
-                )
-            )
-            .addShape(
-                ShimmerDrawable.Shape.TextRow(
-                    shimmerWidth,
-                    4,
-                    lineHeight = lineHeight,
-                    lineSpace = defaultSpace,
-                    cornerRadius = defaultSpace,
-                    offset = defaultPadding to defaultPadding
-                )
-            )
-            .addShape(
-                ShimmerDrawable.Shape.Rectangle(
-                    shimmerWidth ,
-                    context.dpToIntPx(56),
-                    cornerRadius = defaultSpace,
-                    offset = defaultPadding to defaultSpace
-                )
-            )
-            .addShape(
-                ShimmerDrawable.Shape.TextRow(
-                    shimmerWidth,
-                    4,
-                    lineHeight = lineHeight,
-                    lineSpace = defaultSpace,
-                    offset = defaultPadding to defaultPadding
-                )
-            )
-            .itemPatternCount(3)
-            .setBaseColor(context.getColor(R.color.color_gray_light))
-            .setHighlightColor(context.getColor(R.color.color_divider))
-            .build()
-    }
-
-    init {
-        addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
-            override fun onViewDetachedFromWindow(v: View?) {
-                shimmerDrawable.stop()
-            }
-
-            override fun onViewAttachedToWindow(v: View?) {/*nothing*/}
-        })
-    }
+    var isLoading: Boolean = true
+    val padding = context.dpToIntPx(8)//8dp
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var usedHeight = paddingTop
@@ -129,10 +43,10 @@ class MarkdownContentView @JvmOverloads constructor(
         children.forEach {
             measureChild(it, widthMeasureSpec, heightMeasureSpec)
             usedHeight += it.measuredHeight
-        }
 
+        }
         usedHeight += paddingBottom
-        setMeasuredDimension(width, if (usedHeight < minimumHeight) minimumHeight else usedHeight)
+        setMeasuredDimension(width, usedHeight)
     }
 
 
@@ -164,14 +78,15 @@ class MarkdownContentView @JvmOverloads constructor(
 
     fun setContent(content: List<MarkdownElement>) {
         elements = content
-        var index = 0
+
         content.forEach {
             when (it) {
                 is MarkdownElement.Text -> {
                     val tv = MarkdownTextView(context, textSize).apply {
+
                         setPaddingOptionally(
-                            left = defaultSpace,
-                            right = defaultSpace
+                            left = padding,
+                            right = padding
                         )
                         setLineSpacing(fontSize * 0.5f, 1f)
                     }
@@ -220,18 +135,19 @@ class MarkdownContentView @JvmOverloads constructor(
 
         if (searchResult.isEmpty()) return
 
+
         val bounds = elements.map { it.bounds }
         val result = searchResult.groupByBounds(bounds)
 
         children.forEachIndexed { index, view ->
             view as IMarkdownView
             //search for child with markdown element offset
-            view.renderSearchResult(result[index], elements[index].offset)
+           view.renderSearchResult(result[index], elements[index].offset)
         }
     }
 
     fun renderSearchPosition(
-        searchPosition: Pair<Int, Int>?
+        searchPosition: Pair<Int, Int>?//,force: Boolean = false //TODO ??
     ) {
         searchPosition ?: return
         val bounds = elements.map { it.bounds }
@@ -279,30 +195,17 @@ class MarkdownContentView @JvmOverloads constructor(
         dispatchFreezeSelfOnly(container)
     }
 
-    private fun hideShimmer() {
-//        shimmerDrawable.stop()
-        (foreground as? ShimmerDrawable)?.stop()
-        foreground = null
-    }
-
-    private fun showShimmer() {
-//        shimmerListener = doOnPreDraw {
-            foreground = shimmerDrawable
-            shimmerDrawable.start()
-//        }
-    }
-
     private class LayoutManager() : Parcelable {
         var ids: MutableList<Int> = mutableListOf()
         var container: SparseArray<Parcelable> = SparseArray()
 
         constructor(parcel: Parcel) : this() {
-            ids = parcel.createIntArray()!!.toMutableList()
+            ids =  parcel.readArrayList(Int::class.java.classLoader) as ArrayList<Int> //parcel.createIntArray()!!.toMutableList()//TODO //Log.e("MarkdownContentView", "parcel: $ids.");
             container =
                 parcel.readSparseArray<Parcelable>(this::class.java.classLoader) as SparseArray<Parcelable>
         }
 
-        override fun writeToParcel(parcel: Parcel, flags: Int) {
+        override fun writeToParcel(parcel: Parcel, flags: Int) { //Log.e("MarkdownContentView", "write parcel: ${ids.size}.");
             parcel.writeIntArray(ids.toIntArray())
             parcel.writeSparseArray(container)
         }

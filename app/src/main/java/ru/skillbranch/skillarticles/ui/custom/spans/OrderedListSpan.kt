@@ -8,6 +8,22 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.annotation.VisibleForTesting
 
+/*
+*OrderedListSpan
+Необходимо реализовать RegEx выражения для разбора элементов markdown разметки
+(упорядоченный элемент списка) и пользовательский Span реализующий интерфейс LeadingMarginSpan
++2
+Реализуй RegEx выражение для поиска упорядоченного элемента списка в markdown разметке
+соответствующий паттерну:
+1. text //valid
+2. text //valid
+3. text //valid
+ 1. text //invalid
+A text //invalid
+1 //invalid
+И реализуй пользовательский Span (OrderedListSpan.kt) для отрисовки упорядоченного элемента списка
+(убедиться в правильности отрисовки при помощи приложенных mock тестов)
+ */
 
 class OrderedListSpan(
     @Px
@@ -19,6 +35,7 @@ class OrderedListSpan(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 
     override fun getLeadingMargin(first: Boolean): Int {
+        //return (4*bulletRadius+gapWidth).toInt()
         return (order.length.inc() * gapWidth).toInt()
     }
 
@@ -27,7 +44,9 @@ class OrderedListSpan(
         lineTop: Int, lineBaseline: Int, lineBottom: Int, text: CharSequence?, lineStart: Int,
         lineEnd: Int, isFirstLine: Boolean, layout: Layout?
     ) {
+
         if (isFirstLine) {
+            // order
             paint.withCustomColor {
                 canvas.drawText(
                     order,

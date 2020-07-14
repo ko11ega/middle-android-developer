@@ -2,7 +2,6 @@ package ru.skillbranch.skillarticles.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.Checkable
 import android.widget.ImageView
@@ -43,4 +42,6 @@ class CheckableImageView @JvmOverloads constructor(
     override fun onClick(v: View?) {
         toggle()
     }
+
+
 }

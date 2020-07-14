@@ -1,5 +1,6 @@
 package ru.skillbranch.skillarticles.data.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -16,8 +17,8 @@ object ArticleRepository {
     private val network = NetworkDataHolder
 
     fun loadArticleContent(articleId: String): LiveData<List<MarkdownElement>?> {
-        return Transformations.map(network.loadArticleContent(articleId)) {
-            return@map if (it == null) null
+        return Transformations.map(network.loadArticleContent(articleId)){
+            return@map  if(it == null) null
             else MarkdownParser.parse(it)
         }
     }
@@ -53,7 +54,7 @@ object ArticleRepository {
         size: Int,
         articleId: String
     ): List<CommentItemData> {
-        val data = network.commentsData.getOrElse(articleId) { mutableListOf() }
+        val data = network.commentsData.getOrElse(articleId) { mutableListOf()}
         return when {
             slug == null -> data.take(size)
 
@@ -61,13 +62,14 @@ object ArticleRepository {
                 .drop(1)
                 .take(size)
 
-            size < 0 -> data
+            size< 0 -> data
                 .dropLastWhile { it.slug != slug }
                 .dropLast(1)
                 .takeLast(abs(size))
 
             else -> emptyList()
-        }.apply { sleep(1500) }
+        }.apply {sleep(500)}
+
     }
 
     fun sendComment(articleId: String, comment: String, answerToSlug: String?) {
@@ -100,7 +102,10 @@ class CommentsDataSource(
         callback: LoadInitialCallback<CommentItemData>
     ) {
         val result = itemProvider(params.requestedInitialKey, params.requestedLoadSize, articleId)
-
+        Log.e(
+            "ArticleRepository",
+            "loadInitial: key > ${params.requestedInitialKey} size > ${result.size} totalCount > $totalCount"
+        );
         callback.onResult(
             if (totalCount > 0) result else emptyList(),
             0,
@@ -110,14 +115,35 @@ class CommentsDataSource(
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<CommentItemData>) {
         val result = itemProvider(params.key, params.requestedLoadSize, articleId)
+        Log.e("ArticleRepository", "loadAfter: key > ${params.key} size > ${result.size} ");
         callback.onResult(result)
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<CommentItemData>) {
         val result = itemProvider(params.key, -params.requestedLoadSize, articleId)
+        Log.e("ArticleRepository", "loadBefore: key > ${params.key} size > ${result.size} ");
         callback.onResult(result)
     }
 
-    override fun getKey(item: CommentItemData): String = item.slug
+    override fun getKey(item: CommentItemData): String =item.slug
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
