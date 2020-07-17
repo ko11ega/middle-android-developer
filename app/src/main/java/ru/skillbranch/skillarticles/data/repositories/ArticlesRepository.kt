@@ -28,10 +28,10 @@ object ArticlesRepository {
 
     private val network = NetworkDataHolder
     private var articlesDao = db.articlesDao()
-    private var articleCountDao = db.articleCountsDao()
+    private var articleCountsDao = db.articleCountsDao()
     private var categoriesDao = db.categoriesDao()
     private var tagsDao = db.tagsDao()
-    private var articlePersonalDao = db.articlePersonalInfos()
+    private var articlePersonalDao = db.articlePersonalInfosDao()//TODO was db.articlePersonalInfos()
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun setupTestDao(
