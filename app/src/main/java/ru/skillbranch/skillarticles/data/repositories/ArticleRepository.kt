@@ -32,10 +32,10 @@ interface IArticleRepository {
 object ArticleRepository : IArticleRepository {
     private val network = NetworkDataHolder
     private val preferences = PrefManager
-    private val articlesDao = db.articlesDao()
-    private val articlePersonalDao = db.articlePersonalInfosDao()
-    private val articleCountsDao = db.articleCountsDao()
-    private val articleContentDao = db.articleContentsDao()
+    private var articlesDao = db.articlesDao()
+    private var articlePersonalDao = db.articlePersonalInfosDao()
+    private var articleCountsDao = db.articleCountsDao()
+    private var articleContentDao = db.articleContentsDao()
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun setupTestDao(

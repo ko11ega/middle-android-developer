@@ -10,17 +10,17 @@ interface IArticleViewModel {
      * Получение полной информации о статье из сети
      * (или базы данных если она сохранена, наличие статьи в базе не надо реализовывать в данном уроке)
      */
-    fun getArticleContent(): LiveData<List<MarkdownElement>?>
+    //fun getArticleContent(): LiveData<List<MarkdownElement>?> //TODO
 
     /**
      * Получение краткой информации о статье из базы данных
      */
-    fun getArticleData(): LiveData<ArticleData?>
+    //fun getArticleData(): LiveData<ArticleData?> //TODO
 
     /**
      * Получение пользовательской информации о статье из базы данных
      */
-    fun getArticlePersonalInfo(): LiveData<ArticlePersonalInfo?>
+    //fun getArticlePersonalInfo(): LiveData<ArticlePersonalInfo?> //TODO
 
     /**
      * Получение настроек приложения

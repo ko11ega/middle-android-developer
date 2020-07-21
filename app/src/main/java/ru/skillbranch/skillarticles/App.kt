@@ -24,5 +24,6 @@ class App : Application() {
         //TODO set default Night Mode
 
         Stetho.initializeWithDefaults(this)
+
     }
 }

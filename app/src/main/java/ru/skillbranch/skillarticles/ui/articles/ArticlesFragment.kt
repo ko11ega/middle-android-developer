@@ -53,7 +53,7 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel>() {
                 null
             ) { _ ->
                 val action = ArticlesFragmentDirections.choseCategory(
-                    binding.selectedCategories.toTypeArray(),
+                    binding.selectedCategories.toTypedArray(),
                     binding.categories.toTypedArray()
                 )
                 viewModel.navigate(NavigationCommand.To(action.actionId, action.arguments))

@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import ru.skillbranch.skillarticles.data.local.entities.ArticleCounts
 
+
 @Dao
 interface ArticleCountsDao: BaseDao<ArticleCounts> {
 
@@ -16,33 +17,44 @@ interface ArticleCountsDao: BaseDao<ArticleCounts> {
             .also { if(it.isNotEmpty()) update(it) }
     }
 
-    @Query("""
+    @Query(
+        """
         SELECT * from article_counts
-    """)
+    """
+    )
     fun findArticleCounts(): List<ArticleCounts>
 
-    @Query("""
+    @Query(
+        """
         UPDATE article_counts SET likes =likes+1, updated_at = CURRENT_TIMESTAMP
         WHERE article_id = :articleId
-    """)
+    """
+    )
     fun incrementLike(articleId: String): Int
 
-    @Query("""
+    @Query(
+        """
         UPDATE article_counts SET likes =MAX(0,likes-1), updated_at = CURRENT_TIMESTAMP
         WHERE article_id = :articleid
-    """)
+    """
+    )
     fun decrementLike(articleid: String): Int
 
-    @Query("""
+    @Query(
+        """
         UPDATE article_counts SET comments =comments+1, updated_at = CURRENT_TIMESTAMP
         WHERE article_id = :articleId
-    """)
+    """
+    )
     fun incrementCommentsCount(articleId: String)
 
-    @Query("""
+
+    @Query(
+        """
         SELECT comments FROM article_counts
         WHERE article_id = :articleId
-    """)
+    """
+    )
     fun getCommentsCount(articleId: String) : Int
 
 }

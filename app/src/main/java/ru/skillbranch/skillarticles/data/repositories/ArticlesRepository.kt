@@ -1,6 +1,5 @@
 package ru.skillbranch.skillarticles.data.repositories
-import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
+import androidx.annotation.VisibleForTesting import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.sqlite.db.SimpleSQLiteQuery
 import ru.skillbranch.skillarticles.data.NetworkDataHolder
@@ -24,7 +23,7 @@ interface IArticlesRepository {
     fun incrementTagUseCount(tag: String)
 }
 
-object ArticlesRepository {
+object ArticlesRepository: IArticlesRepository {
 
     private val network = NetworkDataHolder
     private var articlesDao = db.articlesDao()
@@ -48,12 +47,12 @@ object ArticlesRepository {
         this.articlePersonalDao = articlePersonalDao
     }
 
-    fun loadArticlesFromNetwork(start: Int, size: Int): List<ArticleItem> =
+    override fun loadArticlesFromNetwork(start: Int, size: Int): List<ArticleRes> =
         network.findArticlesItem(start, size)
 
     override fun insertArticlesToDb(articles: List<ArticleRes>) {
         articlesDao.upsert(articles.map { it.data.toArticle() })
-        articleCountDao.upsert(articles.map { it.counts.toArticleCounts() })
+        articleCountsDao.upsert(articles.map { it.counts.toArticleCounts() })
 
         val refs = articles.map { it.data }
             .fold(mutableListOf<Pair<String, String>>()) { acc, res ->
