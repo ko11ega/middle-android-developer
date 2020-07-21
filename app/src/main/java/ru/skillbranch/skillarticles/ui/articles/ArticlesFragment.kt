@@ -66,16 +66,27 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel>() {
         if (isToggleBookmark) {
             viewModel.handleToggleBookmark(item.id)
         } else {
-            val action = ArticlesFragmentDirections.actionToPageArticle(
+            val action = ArticlesFragmentDirections.actionNavArticlesToPageArticle(
                 item.id,
                 item.author,
-                item.authorAvatar,
+                item.authorAvatar!!,
                 item.category,
                 item.categoryIcon,
                 item.poster,
                 item.title,
                 item.date
             )
+            /*TODO
+            val action = ArticlesFragmentDirections.actionToPageArticle(
+                item.id,
+                item.author,
+                item.authorAvatar!!,
+                item.category,
+                item.categoryIcon,
+                item.poster,
+                item.title,
+                item.date
+            )*/
             viewModel.navigate(NavigationCommand.To(action.actionId, action.arguments))
         }
     }

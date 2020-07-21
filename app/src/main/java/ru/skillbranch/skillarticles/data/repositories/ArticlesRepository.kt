@@ -10,8 +10,8 @@ import ru.skillbranch.skillarticles.data.local.entities.ArticleTagXRef
 import ru.skillbranch.skillarticles.data.local.entities.CategoryData
 import ru.skillbranch.skillarticles.data.local.entities.Tag
 import ru.skillbranch.skillarticles.data.remote.res.ArticleRes
-import ru.skillbranch.skillarticles.extentions.data.toArticle
-import ru.skillbranch.skillarticles.extentions.data.toArticleCounts
+import ru.skillbranch.skillarticles.extensions.data.toArticle
+import ru.skillbranch.skillarticles.extensions.data.toArticleCounts
 import java.lang.StringBuilder
 interface IArticlesRepository {
     fun loadArticlesFromNetwork(start: Int = 0, size: Int): List<ArticleRes>
@@ -269,3 +269,4 @@ sealed class ArticleStrategy() {
             itemProvider(start, size)
     }
 }
+*/
