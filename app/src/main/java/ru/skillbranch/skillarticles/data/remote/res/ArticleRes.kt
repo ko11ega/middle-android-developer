@@ -1,5 +1,6 @@
 package ru.skillbranch.skillarticles.data.remote.res
 
+import ru.skillbranch.skillarticles.data.local.entities.ArticleContent
 import ru.skillbranch.skillarticles.data.local.entities.Author
 import ru.skillbranch.skillarticles.data.local.entities.Category
 import java.util.*
@@ -35,4 +36,15 @@ data class ArticleContentRes(
     val source: String? = null,
     val shareLink: String,
     val updatedAt: Date = Date()
-)
+) {
+    fun toArticleContent(): ArticleContent { // TODO +
+        val res: ArticleContent = ArticleContent(
+            articleId = this.articleId,
+            content = this.content,
+            source = this.source,
+            shareLink = this.shareLink,
+            updatedAt = this.updatedAt
+        )
+        return res
+    }
+}

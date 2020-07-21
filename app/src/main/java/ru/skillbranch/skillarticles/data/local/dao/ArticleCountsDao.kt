@@ -1,10 +1,10 @@
 package ru.skillbranch.skillarticles.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import ru.skillbranch.skillarticles.data.local.entities.ArticleCounts
-
 
 @Dao
 interface ArticleCountsDao: BaseDao<ArticleCounts> {
@@ -55,6 +55,6 @@ interface ArticleCountsDao: BaseDao<ArticleCounts> {
         WHERE article_id = :articleId
     """
     )
-    fun getCommentsCount(articleId: String) : Int
+    fun getCommentsCount(articleId: String) : LiveData<Int>
 
 }
