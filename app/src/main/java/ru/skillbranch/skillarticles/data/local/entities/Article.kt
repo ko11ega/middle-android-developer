@@ -94,6 +94,12 @@ data class ArticleFull(
     val isLike: Boolean = false,
     val date: Date,
     val content: List<MarkdownElement>? = null
-//    val source: String? = null, //TODO implement me
-//    val tags: List<String>
+    //val source: String? = null //TODO implement me
+    //@TypeConverters(ListConverter::class)
+    //val tags: List<String> = emptyList()
 )
+
+class ListConverter {
+    @TypeConverter
+    fun toList(str: String): List<String> = str.split(",")
+}

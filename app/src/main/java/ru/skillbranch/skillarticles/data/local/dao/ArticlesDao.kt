@@ -13,7 +13,7 @@ interface ArticlesDao : BaseDao<Article>{
         SELECT * FROM articles
         WHERE id = :id
     """)
-    fun findArticleById(id: String): LiveData<List<Article>>
+    fun findArticleById(id: String): LiveData<Article>
 
     @Transaction
     fun upsert(list: List<Article>){

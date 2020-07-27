@@ -23,7 +23,7 @@ interface ArticleCountsDao: BaseDao<ArticleCounts> {
         WHERE article_id = :articleId
     """
     )
-    fun findArticleCounts(articleId:String): LiveData<List<ArticleCounts>>
+    fun findArticleCounts(articleId:String): LiveData<ArticleCounts>
 
     @Query(
         """

@@ -19,7 +19,7 @@ interface ArticlePersonalInfosDao: BaseDao<ArticlePersonalInfo> {
         WHERE article_id = :articleId
     """)
     //- получение ArticlePersonalInfo для конкретной статьи
-    fun findPersonalInfos(articleId:String): LiveData<List<ArticlePersonalInfo>>
+    fun findPersonalInfos(articleId:String): LiveData<ArticlePersonalInfo>
 
 
     @Transaction
