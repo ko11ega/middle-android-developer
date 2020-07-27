@@ -9,6 +9,12 @@ import ru.skillbranch.skillarticles.data.local.entities.*
 @Dao
 interface ArticlesDao : BaseDao<Article>{
 
+    @Query("""
+        SELECT * FROM articles
+        WHERE id = :id
+    """)
+    fun findArticleById(id: String): LiveData<List<Article>>
+
     @Transaction
     fun upsert(list: List<Article>){
         insert(list)
@@ -17,21 +23,17 @@ interface ArticlesDao : BaseDao<Article>{
             .also { if(it.isNotEmpty()) update(it) }
     }
 
-    @Query("""
-        SELECT * FROM articles
-    """)
-    fun findArticles(): List<Article>
 
     @Query("""
         SELECT * FROM articles
-        WHERE id = :id
     """)
-    fun findArticleById(id: String): Article
+    fun findArticles(): LiveData<List<ArticleItem>> // TODO fixed
+
 
     @Query("""
         SELECT * FROM ArticleItem
     """)
-    fun findArticleItems(): List<ArticleItem>
+    fun findArticleItems(): LiveData<List<ArticleItem>> // TODO fixed
 
     @Query("""
         SELECT * FROM ArticleItem
