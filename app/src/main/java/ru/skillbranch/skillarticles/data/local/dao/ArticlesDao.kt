@@ -9,6 +9,12 @@ import ru.skillbranch.skillarticles.data.local.entities.*
 @Dao
 interface ArticlesDao : BaseDao<Article>{
 
+    @Query("""
+        SELECT * FROM articles
+        WHERE id = :id
+    """)
+    fun findArticleById(id: String): LiveData<List<Article>>
+
     @Transaction
     fun upsert(list: List<Article>){
         insert(list)
@@ -17,34 +23,30 @@ interface ArticlesDao : BaseDao<Article>{
             .also { if(it.isNotEmpty()) update(it) }
     }
 
-    @Query("""
-        SELECT * FROM articles
-    """)
-    fun findArticles(): List<Article>
 
     @Query("""
         SELECT * FROM articles
-        WHERE id = :id
     """)
-    fun findArticleById(id: String): Article
+    fun findArticles(): LiveData<List<Article>>
+
 
     @Query("""
         SELECT * FROM ArticleItem
     """)
-    fun findArticleItems(): List<ArticleItem>
+    fun findArticleItems(): LiveData<List<ArticleItem>> // TODO fixed
 
     @Query("""
         SELECT * FROM ArticleItem
         WHERE category_id IN (:categoryIds)
     """)
-    fun findArticleItemsByCategoryIds(categoryIds: List<String>): List<ArticleItem>
+    fun findArticleItemsByCategoryIds(categoryIds: List<String>): LiveData<List<ArticleItem>> // TODO fixed
 
     @Query("""
         SELECT * FROM ArticleItem
         INNER JOIN article_tag_x_ref AS refs ON refs.a_id = id
         WHERE refs.t_id = :tag
     """)
-    fun findArticlesByTagId(tag: String): List<ArticleItem>
+    fun findArticlesByTagId(tag: String): LiveData<List<ArticleItem>> // TODO fixed from List<ArticleItem>
 
 
     @RawQuery(observedEntities = [ArticleItem::class])

@@ -1,11 +1,26 @@
 package ru.skillbranch.skillarticles.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import ru.skillbranch.skillarticles.data.local.entities.ArticlePersonalInfo
 @Dao
 interface ArticlePersonalInfosDao: BaseDao<ArticlePersonalInfo> {
+
+    @Query("""
+        SELECT * FROM article_personal_infos
+    """)
+    //- получить все записи ArticlePersonalInfo (ArticlePersonalInfosDao)
+    fun findPersonalInfos(): LiveData<List<ArticlePersonalInfo>>
+
+    @Query("""
+        SELECT * FROM article_personal_infos
+        WHERE article_id = :articleId
+    """)
+    //- получение ArticlePersonalInfo для конкретной статьи
+    fun findPersonalInfos(articleId:String): LiveData<List<ArticlePersonalInfo>>
+
 
     @Transaction
     fun upsert(list: List<ArticlePersonalInfo>){
