@@ -1,5 +1,6 @@
 package ru.skillbranch.skillarticles.data.repositories
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -66,7 +67,7 @@ object ArticleRepository : IArticleRepository {
     }
 
     override fun updateSettings(appSettings: AppSettings) {
-        // TODO implement me
+       PrefManager.updatePrefLiveData(appSettings)
     }
 
     override fun fetchArticleContent(articleId: String) {
